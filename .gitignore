@@ -1,6 +1,49 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+*.env.*
+*.local
+
+# Build and cache directories
+out/
+cache/
+artifacts/
+typechain/
+broadcast/
+forge-artifacts/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary upload directory
+uploads/
+
+# Test coverage
+coverage/
+.coverage/
+coverage.json
+lcov.info
+
+# Mac OS
+.DS_Store
+
 # Compiler files
 cache/
 out/
+forge-artifacts/
 
 # Ignores development broadcast logs
 !/broadcast
@@ -10,5 +53,6 @@ out/
 # Docs
 docs/
 
-# Dotenv file
-.env
+# Deployment files
+.openzeppelin/
+deployments/localhost/

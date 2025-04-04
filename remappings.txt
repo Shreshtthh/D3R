@@ -1,0 +1,5 @@
+@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
+@chainlink/contracts/=lib/chainlink/
+forge-std/=lib/forge-std/src/
+chainlink/=lib/chainlink/
+ds-test/=lib/forge-std/lib/ds-test/src/
