@@ -13,6 +13,7 @@ contract NGORegistry is Ownable {
 
     mapping(address => NGO) public ngos;
     address[] public verifiedNGOs;
+
     event NGORegistered(address indexed ngo, string name);
     event NGOVerified(address indexed ngo, bool status);
     event NGOUpdated(address indexed ngo, string name, string website, string contact);
@@ -36,12 +37,12 @@ contract NGORegistry is Ownable {
 
     function verifyNGO(address _ngo, bool _status) external onlyOwner {
         require(bytes(ngos[_ngo].name).length > 0, "NGO not registered");
-        
+
         // If verifying and wasn't previously verified, add to verified list
         if (_status && !ngos[_ngo].verified) {
             verifiedNGOs.push(_ngo);
         }
-        
+
         ngos[_ngo].verified = _status;
         emit NGOVerified(_ngo, _status);
     }
@@ -54,7 +55,7 @@ contract NGORegistry is Ownable {
         require(bytes(ngos[_ngo].name).length > 0, "NGO not registered");
         return ngos[_ngo];
     }
-    
+
     function getVerifiedNGOsCount() external view returns (uint256) {
         return verifiedNGOs.length;
     }

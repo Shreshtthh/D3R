@@ -27,27 +27,27 @@ contract DeployD3R is Script {
             }
         }
     }
-    
+
     function deployWithPrivateKey(uint256 deployerPrivateKey) internal {
         // Start broadcasting transactions
         vm.startBroadcast(deployerPrivateKey);
-        
+
         // Owner address
         address owner = 0x06eDF1ee5162DAD61BC75A4e60EaEC3228DceDEe;
-        
+
         // Deploy contracts in correct order
         console.log("Deploying NGORegistry...");
         NGORegistry registry = new NGORegistry(owner);
         console.log("NGORegistry deployed at:", address(registry));
-        
+
         console.log("Deploying FundPool...");
         FundPool fundPool = new FundPool(address(registry));
         console.log("FundPool deployed at:", address(fundPool));
-        
+
         console.log("Deploying DonationTracker...");
         DonationTracker tracker = new DonationTracker(address(fundPool));
         console.log("DonationTracker deployed at:", address(tracker));
-        
+
         // Get Chainlink parameters from environment
         address linkToken = vm.envAddress("LINK_TOKEN_ADDRESS");
         address oracle = vm.envAddress("CHAINLINK_ORACLE_ADDRESS");
@@ -60,32 +60,27 @@ contract DeployD3R is Script {
         if (bytes(jobIdStr).length >= 2 && bytes(jobIdStr)[0] == "0" && bytes(jobIdStr)[1] == "x") {
             bytes memory jobIdBytes = bytes(jobIdStr);
             string memory trimmed = new string(jobIdBytes.length - 2);
-            for (uint i = 0; i < bytes(trimmed).length; i++) {
+            for (uint256 i = 0; i < bytes(trimmed).length; i++) {
                 bytes(trimmed)[i] = jobIdBytes[i + 2];
             }
             jobIdStr = trimmed;
         }
-        
+
         // Convert the string job ID to bytes32
         bytes32 jobId = stringToBytes32(jobIdStr);
         console.log("Job ID converted to bytes32 format");
-        
+
         uint256 fee = vm.envUint("CHAINLINK_FEE");
-        
+
         console.log("Deploying ChainlinkDisasterOracle...");
-        ChainlinkDisasterOracle chainlinkOracle = new ChainlinkDisasterOracle(
-            linkToken,
-            oracle,
-            jobId,
-            fee
-        );
+        ChainlinkDisasterOracle chainlinkOracle = new ChainlinkDisasterOracle(linkToken, oracle, jobId, fee);
         console.log("ChainlinkDisasterOracle deployed at:", address(chainlinkOracle));
-        
+
         // Setup contract relationships
         console.log("Setting up contract relationships...");
         fundPool.setTrackerAuthorization(address(tracker), true);
         console.log("Authorized DonationTracker to release funds");
-        
+
         // Transfer contract ownership to the specified owner if needed
         if (owner != msg.sender) {
             fundPool.transferOwnership(owner);
@@ -93,13 +88,13 @@ contract DeployD3R is Script {
             chainlinkOracle.transferOwnership(owner);
             console.log("Transferred ownership of contracts to:", owner);
         }
-        
+
         // Stop broadcasting transactions
         vm.stopBroadcast();
-        
+
         console.log("Deployment complete!");
     }
-    
+
     // Helper function to convert string to bytes32
     function stringToBytes32(string memory source) internal pure returns (bytes32 result) {
         assembly {
