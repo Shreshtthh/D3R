@@ -1,0 +1,93 @@
+.loadingScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.loadingContent {
+  text-align: center;
+}
+
+.loadingText {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  color: #2563eb;
+  font-weight: 500;
+  animation: fadeInOut 1.5s infinite alternate;
+}
+
+/* Enhanced spinner with D3R branding */
+.spinner {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.cube1, .cube2 {
+  background-color: #2563eb;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: sk-cubemove 1.8s infinite ease-in-out;
+  border-radius: 3px;
+}
+
+.cube2 {
+  background-color: #4f46e5;
+  animation-delay: -0.9s;
+}
+
+/* Add a pulsing D3R logo in the center */
+.spinner::after {
+  content: "D3R";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background-color: #2563eb;
+  border-radius: 4px;
+  padding: 2px 4px;
+  animation: pulse 2s infinite;
+  z-index: 10;
+}
+
+@keyframes sk-cubemove {
+  25% { 
+    transform: translateX(42px) rotate(-90deg) scale(0.5);
+    box-shadow: 0 5px 10px rgba(37, 99, 235, 0.2);
+  } 
+  50% { 
+    transform: translateX(42px) translateY(42px) rotate(-180deg);
+  } 
+  75% { 
+    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    box-shadow: 0 5px 10px rgba(37, 99, 235, 0.2);
+  } 
+  100% { 
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes fadeInOut {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}

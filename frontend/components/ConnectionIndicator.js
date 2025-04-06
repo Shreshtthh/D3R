@@ -42,8 +42,13 @@ export default function ConnectionIndicator({ status, isConnected }) {
           )}
         </div>
         <div className={styles.connectionActions}>
+          {!isConnected && (
+            <span className={styles.demoModeHint}>
+              Using demo data - connect wallet to access real blockchain
+            </span>
+          )}
           <Link href="/connection-check" className={styles.checkConnection}>
-            Check Connection Status
+            {isConnected ? "Check Status" : "Connection Help"}
           </Link>
         </div>
       </div>

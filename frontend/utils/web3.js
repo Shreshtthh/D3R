@@ -7,6 +7,12 @@ import IPFSVerifierABI from '../contracts/IPFSVerifier.json';
 import FundPoolABI from '../contracts/FundPool.json';
 import DonationTrackerABI from '../contracts/DonationTracker.json';
 
+// Import constants
+import { DISASTER_TYPES, URGENCY_LEVELS, CONTRACT_ADDRESSES } from './constants';
+
+// Import demo data without creating circular dependency
+import demoData from './demoData';
+
 let web3;
 let d3rProtocol;
 let milestoneFunding;
@@ -16,36 +22,17 @@ let ipfsVerifier;
 let fundPool;
 let donationTracker;
 
-// Contract addresses - deployed contract addresses
-const D3R_PROTOCOL_ADDRESS = '0xB0C04bF81c2D64cC5Ae4CCeaFe6906D391476304';
-const MILESTONE_FUNDING_ADDRESS = '0xD09c0b1677107e25B78271dA70295580Bf8BEA52';
-const NGO_REGISTRY_ADDRESS = '0x8e675e5C8efF2398D70eeeE62Bd85AB8084b8A01';
-const DISASTER_ORACLE_ADDRESS = '0x109457d4c8501174f774339E4B37635e3f818C94';
-const IPFS_VERIFIER_ADDRESS = '0x4DF627FCDf639D6a4dc420924Df6709e404493c4';
-const FUND_POOL_ADDRESS = '0x52146d464e5DD3a7046940b85231007385AB3105';
-const DONATION_TRACKER_ADDRESS = '0x97154aCFa6f5E85494D0EFd2332368b13b2Da8dc';
+// Re-export constants for convenience
+export { DISASTER_TYPES, URGENCY_LEVELS };
 
-// Disaster types defined in the system
-export const DISASTER_TYPES = {
-  EARTHQUAKE: 'Earthquake',
-  HURRICANE: 'Hurricane',
-  FLOOD: 'Flood',
-  WILDFIRE: 'Wildfire',
-  DROUGHT: 'Drought',
-  TSUNAMI: 'Tsunami',
-  VOLCANIC_ERUPTION: 'Volcanic Eruption',
-  PANDEMIC: 'Pandemic',
-  OTHER: 'Other'
-};
-
-// Urgency levels defined in the system
-export const URGENCY_LEVELS = {
-  'Critical (Level 5)': 5,
-  'High (Level 4)': 4,
-  'Medium (Level 3)': 3,
-  'Low (Level 2)': 2,
-  'Recovery (Level 1)': 1
-};
+// Contract addresses - use from constants
+const D3R_PROTOCOL_ADDRESS = CONTRACT_ADDRESSES.D3R_PROTOCOL;
+const MILESTONE_FUNDING_ADDRESS = CONTRACT_ADDRESSES.MILESTONE_FUNDING;
+const NGO_REGISTRY_ADDRESS = CONTRACT_ADDRESSES.NGO_REGISTRY;
+const DISASTER_ORACLE_ADDRESS = CONTRACT_ADDRESSES.DISASTER_ORACLE;
+const IPFS_VERIFIER_ADDRESS = CONTRACT_ADDRESSES.IPFS_VERIFIER;
+const FUND_POOL_ADDRESS = CONTRACT_ADDRESSES.FUND_POOL;
+const DONATION_TRACKER_ADDRESS = CONTRACT_ADDRESSES.DONATION_TRACKER;
 
 // Initialize Web3 and contract instances
 export const initWeb3 = async (forceConnect = false) => {
@@ -220,6 +207,15 @@ export const connectWallet = async () => {
 // Get all active relief campaigns with verification status
 export const getReliefCampaigns = async (filters = {}) => {
   try {
+    // Check if we're in demo mode
+    if (typeof window !== 'undefined') {
+      const isDemoMode = localStorage.getItem('demoMode') === 'true';
+      if (isDemoMode) {
+        console.log("Using demo campaign data");
+        return demoData.getDemoCampaigns(filters);
+      }
+    }
+
     await initWeb3();
     
     // Get project count
@@ -320,7 +316,48 @@ export const getReliefCampaigns = async (filters = {}) => {
     return campaigns;
   } catch (error) {
     console.error("Error getting relief campaigns:", error);
-    throw error;
+    // Return demo data as fallback in case of error
+    return demoData.getDemoCampaigns(filters);
+  }
+};
+
+// Get a specific campaign by ID
+export const getReliefCampaign = async (id) => {
+  // Check if we're in demo mode
+  if (typeof window !== 'undefined') {
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
+    if (isDemoMode) {
+      console.log("Using demo campaign data for ID:", id);
+      return demoData.getDemoCampaign(id);
+    }
+  }
+  
+  try {
+    const campaigns = await getReliefCampaigns();
+    return campaigns.find(c => c.id.toString() === id?.toString());
+  } catch (error) {
+    console.error(`Error getting campaign with ID ${id}:`, error);
+    return demoData.getDemoCampaign(id);
+  }
+};
+
+// Get milestones for a campaign
+export const getMilestones = async (campaignId) => {
+  // Check if we're in demo mode
+  if (typeof window !== 'undefined') {
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
+    if (isDemoMode) {
+      console.log("Using demo milestone data");
+      return demoData.getDemoMilestones(campaignId);
+    }
+  }
+  
+  try {
+    const campaign = await getReliefCampaign(campaignId);
+    return campaign?.milestones || [];
+  } catch (error) {
+    console.error(`Error getting milestones for campaign ${campaignId}:`, error);
+    return demoData.getDemoMilestones(campaignId);
   }
 };
 
@@ -373,36 +410,59 @@ export const donate = async (campaignId, amount) => {
 
 // Get verification status of a relief campaign
 export const getVerificationStatus = async (disasterId) => {
+  // Check if we're in demo mode
+  if (typeof window !== 'undefined') {
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
+    if (isDemoMode) {
+      console.log("Using demo verification data");
+      return demoData.getDemoVerification(disasterId);
+    }
+  }
+  
   try {
     await initWeb3();
     const verification = await disasterOracle.methods.getDisasterVerification(disasterId).call();
     return verification;
   } catch (error) {
     console.error("Error getting verification status:", error);
-    return {
-      verified: false,
-      confidence: 0,
-      source: "Error retrieving data",
-      timestamp: 0
-    };
+    return demoData.getDemoVerification(disasterId);
   }
 };
 
 // Get NGO details
 export const getNGODetails = async (ngoAddress) => {
+  // Check if we're in demo mode
+  if (typeof window !== 'undefined') {
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
+    if (isDemoMode) {
+      console.log("Using demo NGO data");
+      return demoData.getDemoNGO(ngoAddress);
+    }
+  }
+  
   try {
     await initWeb3();
     const ngoDetails = await ngoRegistry.methods.getNGODetails(ngoAddress).call();
     return ngoDetails;
   } catch (error) {
     console.error("Error getting NGO details:", error);
-    return null;
+    return demoData.getDemoNGO(ngoAddress);
   }
 };
 
 // Get dashboard stats
 export const getDashboardStats = async () => {
   try {
+    // Check if we're in demo mode
+    if (typeof window !== 'undefined') {
+      // This is a client-side check for demo mode
+      const isDemoMode = localStorage.getItem('demoMode') === 'true';
+      if (isDemoMode) {
+        console.log("Using demo stats data");
+        return demoData.getDemoStats();
+      }
+    }
+    
     const { web3 } = await initWeb3();
     
     // Get NGO count
@@ -498,13 +558,8 @@ export const getDashboardStats = async () => {
     };
   } catch (error) {
     console.error("Error getting dashboard stats:", error);
-    // Return dummy data as fallback
-    return {
-      totalDonations: "0",
-      activeCampaigns: 0,
-      peopleHelped: 0,
-      verifiedNGOs: 0
-    };
+    // In case of error, return demo data as fallback
+    return demoData.getDemoStats();
   }
 };
 
@@ -579,15 +634,7 @@ export const verifyIPFSDocument = async (cid) => {
 
 // Get contract addresses for frontend display
 export const getContractAddresses = () => {
-  return {
-    d3rProtocol: D3R_PROTOCOL_ADDRESS,
-    milestoneFunding: MILESTONE_FUNDING_ADDRESS,
-    ngoRegistry: NGO_REGISTRY_ADDRESS,
-    disasterOracle: DISASTER_ORACLE_ADDRESS,
-    ipfsVerifier: IPFS_VERIFIER_ADDRESS,
-    fundPool: FUND_POOL_ADDRESS,
-    donationTracker: DONATION_TRACKER_ADDRESS
-  };
+  return CONTRACT_ADDRESSES;
 };
 
 // Check if wallet was previously connected
@@ -615,6 +662,8 @@ export const checkPreviousConnection = async () => {
 export default {
   initWeb3,
   getReliefCampaigns,
+  getReliefCampaign,
+  getMilestones,
   donate,
   getVerificationStatus,
   getNGODetails,

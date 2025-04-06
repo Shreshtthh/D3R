@@ -1,16 +1,20 @@
 .connectionBanner {
   width: 100%;
-  padding: 0.5rem 0;
-  margin-bottom: 1rem;
-  transition: background-color 0.3s ease;
+  padding: 0.8rem 0;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .connected {
   background-color: #ecfdf5;
+  border: 1px solid #d1fae5;
 }
 
 .disconnected {
-  background-color: #fef2f2;
+  background-color: #eff6ff;
+  border: 1px solid #dbeafe;
 }
 
 .connectionContent {
@@ -19,34 +23,61 @@
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 .connectionStatus {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: inline-block;
+  position: relative;
 }
 
 .connected .dot {
   background-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.connected .dot::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #10b981;
+  opacity: 0.5;
+  animation: pulse 1.5s infinite;
 }
 
 .disconnected .dot {
-  background-color: #ef4444;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+  background-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
 .statusText {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 500;
 }
 
@@ -55,43 +86,64 @@
 }
 
 .disconnected .statusText {
-  color: #b91c1c;
+  color: #1d4ed8;
 }
 
 .networkBadge {
-  padding: 0.2rem 0.6rem;
+  padding: 0.35rem 0.8rem;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
   background-color: #e0f2fe;
   color: #0369a1;
-  margin-left: 0.5rem;
+  margin-left: 0.8rem;
 }
 
 .connectionActions {
   display: flex;
   align-items: center;
+  gap: 1rem;
+}
+
+.demoModeHint {
+  font-size: 0.85rem;
+  color: #6b7280;
+  padding: 0.3rem 0.6rem;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 4px;
+  animation: fadeInOut 2s infinite alternate;
 }
 
 .checkConnection {
-  font-size: 0.8rem;
-  color: #2563eb;
+  font-size: 0.85rem;
+  color: white;
   text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
   transition: all 0.2s ease;
+  background-color: #3b82f6;
+  font-weight: 500;
+}
+
+.connected .checkConnection {
+  background-color: #047857;
 }
 
 .checkConnection:hover {
-  background-color: #dbeafe;
-  text-decoration: underline;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 640px) {
+@keyframes fadeInOut {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
   .connectionContent {
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem;
+    gap: 0.8rem;
+    padding: 0.5rem 1rem;
   }
   
   .connectionStatus {
@@ -100,6 +152,11 @@
   }
   
   .networkBadge {
-    margin-top: 0.25rem;
+    margin-top: 0.4rem;
+  }
+
+  .connectionActions {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }

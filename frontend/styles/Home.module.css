@@ -246,13 +246,13 @@
   width: 100%;
   background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
   color: white;
-  padding: 4rem 2rem;
-  border-radius: 12px;
-  margin-bottom: 3rem;
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+  padding: 5rem 3rem;
+  border-radius: 16px;
+  margin-bottom: 4rem;
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .heroContent {
@@ -260,21 +260,23 @@
 }
 
 .heroBanner h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 3.2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.2;
+  font-weight: 800;
 }
 
 .heroBanner p {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
+  font-size: 1.35rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.92;
   line-height: 1.6;
+  max-width: 90%;
 }
 
 .heroButtons {
   display: flex;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .primaryButton {
@@ -282,31 +284,36 @@
   background-color: white;
   color: #2563eb;
   font-weight: 600;
-  padding: 0.9rem 2rem;
+  padding: 1rem 2.2rem;
+  font-size: 1.05rem;
   border-radius: 30px;
   text-decoration: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .primaryButton:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+  text-decoration: none;
 }
 
 .secondaryButton {
   display: inline-block;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
   color: white;
   font-weight: 600;
-  padding: 0.9rem 2rem;
+  padding: 1rem 2.2rem;
+  font-size: 1.05rem;
   border-radius: 30px;
   text-decoration: none;
   transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 
 .secondaryButton:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.25);
+  text-decoration: none;
 }
 
 .heroImage {
@@ -316,92 +323,111 @@
   align-items: center;
 }
 
-.heroImage img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
 /* Stats Panel */
 .statsPanel {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 2rem auto;
-  background: #f9f9f9;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  border-radius: 16px;
+  padding: 2rem 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  gap: 2rem;
+  border: 1px solid #e2e8f0;
 }
 
 .statBlock {
   text-align: center;
-  padding: 1rem;
-  min-width: 120px;
+  padding: 1.5rem;
+  min-width: 200px;
+  transition: transform 0.3s ease;
 }
 
-.statBlock h3 {
-  font-size: 1.8rem;
-  color: #0070f3;
-  margin: 0;
+.statBlock:hover {
+  transform: translateY(-5px);
 }
 
-.statBlock p {
-  margin: 0.5rem 0 0;
-  font-size: 0.9rem;
-  color: #666;
+.statValue {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2563eb;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  display: block;
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 500;
 }
 
 /* How It Works section */
 .howItWorks {
   width: 100%;
-  max-width: 1000px;
-  margin: 3rem auto;
+  max-width: 1200px;
+  margin: 6rem auto 5rem;
   text-align: center;
 }
 
 .howItWorks h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #333;
+  font-size: 2.4rem;
+  margin-bottom: 3rem;
+  color: #1e293b;
+  font-weight: 800;
 }
 
 .stepsContainer {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  width: 100%;
 }
 
 .step {
   background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  flex: 1;
-  min-width: 250px;
+  padding: 2.5rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
   position: relative;
-  transition: transform 0.3s ease;
+  border: 1px solid #e2e8f0;
 }
 
 .step:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .stepNumber {
-  width: 40px;
-  height: 40px;
-  background: #0070f3;
+  width: 50px;
+  height: 50px;
+  background: #2563eb;
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  margin: 0 auto 1rem;
+  font-size: 1.5rem;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+.step h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.step p {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 /* Recent Aid section */
@@ -522,18 +548,17 @@
 
 .campaignCard {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  position: relative;
   overflow: hidden;
-  transition: transform 0.3s ease;
 }
 
 .campaignCard:hover {
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .campaignHeader {
@@ -553,27 +578,42 @@
 }
 
 .urgencyIndicator[data-urgency="CRITICAL"] {
-  background: #ff3e3e;
+  background-color: #fee2e2;
+  color: #b91c1c;
 }
 
 .urgencyIndicator[data-urgency="HIGH"] {
-  background: #ff8c1a;
+  background-color: #fef3c7;
+  color: #b45309;
 }
 
 .urgencyIndicator[data-urgency="MEDIUM"] {
-  background: #ffcc00;
+  background-color: #eff6ff;
+  color: #1d4ed8;
 }
 
 .urgencyIndicator[data-urgency="LOW"] {
-  background: #6699ff;
+  background-color: #ecfdf5;
+  color: #047857;
 }
 
 .urgencyIndicator[data-urgency="RECOVERY"] {
-  background: #66cc66;
+  background-color: #f3f4f6;
+  color: #4b5563;
 }
 
 .campaignDetails {
-  margin-bottom: 1.5rem;
+  margin: 1.2rem 0;
+  padding: 0.8rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+}
+
+.campaignDetails p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .fundingProgress {
@@ -603,63 +643,726 @@
 
 .campaignActions {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
 }
 
 .donationInput {
   flex: 1;
-  padding: 0.6rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
 }
 
 .donateButton {
-  background: #0070f3;
+  background-color: #2563eb;
   color: white;
+  padding: 0 1.5rem;
   border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
-  white-space: nowrap;
+  transition: background-color 0.2s ease;
 }
 
 .donateButton:hover {
-  background: #0051a2;
+  background-color: #1d4ed8;
 }
 
-.viewDetailsLink {
-  display: block;
+.campaignFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.viewDetailsLink, .transparencyLink {
+  font-size: 0.9rem;
+  color: #4b5563;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.viewDetailsLink:hover, .transparencyLink:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* How It Works Section */
+.howItWorks {
+  margin-top: 4rem;
+  width: 100%;
+  max-width: 1000px;
+  padding: 2rem 0;
+}
+
+.howItWorks h2 {
   text-align: center;
-  margin: 1rem 0;
-  color: #0070f3;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  color: #1f2937;
+}
+
+.stepsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.step {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: relative;
+}
+
+.stepNumber {
+  width: 36px;
+  height: 36px;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin: 0 auto 1rem;
+}
+
+.step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: #1f2937;
+}
+
+.step p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Enhanced verification badge */
+.verificationBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.verificationBadge[data-verified="true"] {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.verificationBadge[data-verified="false"] {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Milestone progress visualization */
+.milestoneProgress {
+  margin: 1.2rem 0;
+}
+
+.milestoneBar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  height: 10px;
+  width: 100%;
+  background-color: #f3f4f6;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.milestone {
+  flex: 1;
+  margin: 0 1px;
+  background-color: #e5e7eb;
+  transition: background-color 0.3s ease;
+}
+
+.completedMilestone {
+  background-color: #2563eb;
+}
+
+/* Error message box */
+.errorBox {
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  text-align: center;
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  border-radius: 6px;
+  color: #b91c1c;
+}
+
+.retryButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #b91c1c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #991b1b;
+}
+
+/* Protocol info section */
+.protocolInfo {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.protocolInfo h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+  font-size: 1.3rem;
+}
+
+.contractTable {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.contractRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+}
+
+.contractRow:last-child {
+  border-bottom: none;
+}
+
+.contractName {
+  font-family: monospace;
+  font-weight: bold;
+  color: #1e40af;
+  white-space: nowrap;
+}
+
+.contractAddress {
+  font-family: monospace;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 1rem;
+  max-width: 60%;
+}
+
+.contractAddress a {
+  color: inherit;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.viewDetailsLink:hover {
+.contractAddress a:hover {
+  color: #2563eb;
   text-decoration: underline;
 }
 
-.transparencyLink {
-  display: block;
-  text-align: right;
-  font-size: 0.8rem;
-  color: #666;
-  text-decoration: none;
-  margin-top: auto;
+/* NGO name styling */
+.ngoName {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.3rem;
+  font-style: italic;
 }
 
-.transparencyLink:hover {
-  color: #0070f3;
+/* Improved verification badge */
+.verificationBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  margin-bottom: 0.6rem;
+  cursor: help;
 }
 
-.noCampaigns {
-  text-align: center;
-  padding: 2rem;
-  background: #f9f9f9;
+.verificationBadge[data-verified="true"] {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.verificationBadge[data-verified="false"] {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+/* Connection status indicator */
+.connectionStatus {
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f9fafb;
   border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+}
+
+.connected {
+  color: #16a34a;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+.disconnected {
+  color: #dc2626;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* Impact Section */
+.impactSection {
+  width: 100%;
+  margin: 5rem 0;
+  text-align: center;
+}
+
+.impactSection h2 {
+  font-size: 2.4rem;
+  margin-bottom: 2.5rem;
+  color: #1e293b;
+  font-weight: 800;
+}
+
+/* Featured Campaigns */
+.featuredCampaigns {
+  width: 100%;
+  margin: 6rem 0 4rem;
+}
+
+.featuredCampaigns h2 {
+  font-size: 2.4rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  color: #1e293b;
+  font-weight: 800;
+}
+
+.campaignsPreview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2.5rem;
+  width: 100%;
+}
+
+.campaignPreviewCard {
+  background-color: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e7eb;
+  height: 100%;
+}
+
+.campaignPreviewCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.campaignPreviewCard h3 {
+  font-size: 1.4rem;
+  color: #1e293b;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.campaignLocation {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campaignLocation:before {
+  content: "📍";
+  font-size: 1rem;
+}
+
+.progressBarSmall {
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #4f46e5);
+  border-radius: 4px;
+}
+
+.campaignStats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.viewCampaignButton {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background-color: #2563eb;
+  color: white;
+  padding: 0.9rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  margin-top: auto;
+  text-decoration: none;
+}
+
+.viewCampaignButton:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  text-decoration: none;
+}
+
+.viewAllContainer {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.viewAllButton {
+  display: inline-block;
+  background-color: #f8fafc;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.viewAllButton:hover {
+  background-color: #eff6ff;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  text-decoration: none;
+}
+
+/* Trust Section */
+.trustSection {
+  width: 100%;
+  max-width: 1200px;
+  margin: 6rem auto 4rem;
+  text-align: center;
+}
+
+.trustSection h2 {
+  font-size: 2.4rem;
+  margin-bottom: 3rem;
+  color: #1e293b;
+  font-weight: 800;
+}
+
+.trustPoints {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.5rem;
+}
+
+.trustPoint {
+  background: white;
+  padding: 2.5rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.trustPoint:hover {
+  transform: translateY(-8px);
+}
+
+.trustIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.trustPoint h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.trustPoint p {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Join Section */
+.joinSection {
+  width: 100%;
+  margin: 6rem 0 2rem;
+}
+
+.joinBox {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  border-radius: 16px;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.2);
+}
+
+.joinBox h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  font-weight: 800;
+}
+
+.joinBox p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Connection Status Page Styles */
+.statusPanel, .contractsPanel, .projectsPanel {
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contractList {
+  margin-top: 1rem;
+}
+
+.contractItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.contractItem:last-child {
+  border-bottom: none;
+}
+
+.contractName {
+  font-weight: 500;
+  color: #334155;
+}
+
+.connected {
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.disconnected {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.helpSection {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+}
+
+.helpSection h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #334155;
+}
+
+.helpTips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.helpTip {
+  background-color: #f0f9ff;
+  border-left: 4px solid #3b82f6;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+}
+
+.helpTip h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #1e3a8a;
+}
+
+.helpTip p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.retryButton {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.retryButton:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Navigation Cards for main sections */
+.navigationCards {
+  width: 100%;
+  max-width: 1200px;
+  margin: 5rem auto 6rem;
+  padding: 0 1rem;
+}
+
+.navigationCards h2 {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 3rem;
+  color: #1e293b;
+  font-weight: 800;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.navCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  padding: 2.2rem 1.8rem;
+  text-decoration: none;
+  color: #1e293b;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+  height: 100%;
+  min-height: 220px;
+}
+
+.navCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.donorCard {
+  border-top: 5px solid #2563eb;
+}
+
+.ngoCard {
+  border-top: 5px solid #10b981;
+}
+
+.milestoneCard {
+  border-top: 5px solid #f59e0b;
+}
+
+.checkCard {
+  border-top: 5px solid #8b5cf6;
+}
+
+.cardContent {
+  flex: 1;
+}
+
+.cardIcon {
+  font-size: 3rem;
+  margin-bottom: 1.2rem;
+}
+
+.navCard h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.navCard p {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.cardArrow {
+  align-self: flex-end;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  color: #94a3b8;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.navCard:hover .cardArrow {
+  transform: translateX(8px);
+  color: #2563eb;
 }
 
 /* Responsive adjustments */
@@ -692,11 +1395,87 @@
   .checkboxGrid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .heroBanner {
+    padding: 4rem 2rem;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .heroBanner h1 {
+    font-size: 2.6rem;
+  }
+  
+  .heroBanner p {
+    font-size: 1.2rem;
+    max-width: 100%;
+  }
+  
+  .heroButtons {
+    justify-content: center;
+  }
+
+  .trustPoints {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
   .checkboxGrid {
     grid-template-columns: 1fr;
+  }
+
+  .heroBanner {
+    padding: 3rem 1.5rem;
+  }
+  
+  .heroBanner h1 {
+    font-size: 2.2rem;
+  }
+  
+  .heroBanner p {
+    font-size: 1.1rem;
+  }
+  
+  .heroButtons {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .primaryButton, .secondaryButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  .statsPanel {
+    padding: 1rem;
+  }
+  
+  .statBlock {
+    padding: 1rem;
+    min-width: 140px;
+  }
+  
+  .statValue {
+    font-size: 2rem;
+  }
+  
+  .statLabel {
+    font-size: 0.9rem;
+  }
+  
+  .step {
+    padding: 2rem 1.2rem;
+  }
+  
+  .navigationCards {
+    margin: 3rem auto 4rem;
+  }
+  
+  .navigationCards h2 {
+    font-size: 2rem;
   }
 }
 
@@ -1047,75 +1826,6 @@
 /* Protocol info section */
 .protocolInfo {
   width: 100%;
-  max-width: 800px;
-  margin-top: 3rem;
-  padding: 1.5rem;
-  background-color: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
-
-.protocolInfo h3 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #1e293b;
-  font-size: 1.3rem;
-}
-
-.contractTable {
-  width: 100%;
-}
-
-.contractRow {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.contractRow:last-child {
-  border-bottom: none;
-}
-
-.contractName {
-  font-family: monospace;
-  font-weight: bold;
-  color: #1e40af;
-}
-
-.contractDescription {
-  color: #64748b;
-  text-align: right;
-}
-
-/* Update steps to match 5-step process */
-.stepsContainer {
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-}
-
-/* Responsive design improvements */
-@media (max-width: 768px) {
-  .statsPanel {
-    gap: 1rem;
-  }
-  
-  .statBlock {
-    width: calc(50% - 1rem);
-    padding: 1rem;
-  }
-  
-  .campaignActions {
-    flex-direction: column;
-  }
-  
-  .stepsContainer {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Updated Protocol info section with contract addresses */
-.protocolInfo {
-  width: 100%;
   max-width: 900px;
   margin-top: 3rem;
   padding: 1.5rem;
@@ -1234,196 +1944,229 @@
 /* Impact Section */
 .impactSection {
   width: 100%;
-  margin: 3rem 0;
+  margin: 5rem 0;
   text-align: center;
 }
 
 .impactSection h2 {
-  font-size: 2.2rem;
-  margin-bottom: 2rem;
+  font-size: 2.4rem;
+  margin-bottom: 2.5rem;
   color: #1e293b;
+  font-weight: 800;
 }
 
 /* Featured Campaigns */
 .featuredCampaigns {
   width: 100%;
-  margin: 4rem 0;
+  margin: 6rem 0 4rem;
 }
 
 .featuredCampaigns h2 {
-  font-size: 2.2rem;
-  margin-bottom: 2rem;
+  font-size: 2.4rem;
+  margin-bottom: 2.5rem;
   text-align: center;
   color: #1e293b;
+  font-weight: 800;
 }
 
 .campaignsPreview {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2.5rem;
   width: 100%;
 }
 
 .campaignPreviewCard {
   background-color: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 1px solid #e5e7eb;
+  height: 100%;
 }
 
 .campaignPreviewCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
 .campaignPreviewCard h3 {
-  margin: 1rem 0;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: #1e293b;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+  font-weight: 700;
 }
 
 .campaignLocation {
-  color: #64748b;
-  margin-bottom: 1rem;
   font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campaignLocation:before {
+  content: "📍";
+  font-size: 1rem;
 }
 
 .progressBarSmall {
-  height: 6px;
-  background: #f0f0f0;
-  border-radius: 3px;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #4f46e5);
+  border-radius: 4px;
 }
 
 .campaignStats {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
   font-size: 0.9rem;
   color: #64748b;
+  margin-bottom: 1.5rem;
 }
 
 .viewCampaignButton {
-  background-color: #f8fafc;
-  color: #2563eb;
-  padding: 0.6rem 0;
-  border-radius: 6px;
+  display: block;
+  width: 100%;
   text-align: center;
-  text-decoration: none;
+  background-color: #2563eb;
+  color: white;
+  padding: 0.9rem;
+  border-radius: 8px;
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 0.95rem;
-  border: 1px solid #e5e7eb;
   transition: all 0.2s ease;
   margin-top: auto;
+  text-decoration: none;
 }
 
 .viewCampaignButton:hover {
-  background-color: #e0e7ff;
-  border-color: #c7d2fe;
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  text-decoration: none;
 }
 
 .viewAllContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 2.5rem;
+  text-align: center;
+  margin-top: 3rem;
 }
 
 .viewAllButton {
   display: inline-block;
-  background-color: #f1f5f9;
+  background-color: #f8fafc;
   color: #2563eb;
+  border: 2px solid #2563eb;
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  font-size: 1.05rem;
   font-weight: 600;
-  padding: 1rem 2.5rem;
-  border-radius: 30px;
+  transition: all 0.2s ease;
   text-decoration: none;
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
 }
 
 .viewAllButton:hover {
-  background-color: #e0e7ff;
+  background-color: #eff6ff;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  text-decoration: none;
 }
 
 /* Trust Section */
 .trustSection {
   width: 100%;
-  margin: 5rem 0 2rem;
+  max-width: 1200px;
+  margin: 6rem auto 4rem;
   text-align: center;
-  padding: 3rem 0;
-  background-color: #f8fafc;
-  border-radius: 12px;
 }
 
 .trustSection h2 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   margin-bottom: 3rem;
   color: #1e293b;
+  font-weight: 800;
 }
 
 .trustPoints {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  padding: 0 2rem;
+  gap: 2.5rem;
 }
 
 .trustPoint {
-  text-align: center;
+  background: white;
+  padding: 2.5rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.trustPoint:hover {
+  transform: translateY(-8px);
 }
 
 .trustIcon {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
-  background-color: #e0e7ff;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .trustPoint h3 {
+  margin-bottom: 1rem;
   font-size: 1.3rem;
-  margin-bottom: 0.8rem;
   color: #1e293b;
+  font-weight: 700;
 }
 
 .trustPoint p {
   color: #64748b;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 /* Join Section */
 .joinSection {
   width: 100%;
-  margin: 5rem 0;
+  margin: 6rem 0 2rem;
 }
 
 .joinBox {
-  background: linear-gradient(135deg, #4f46e5 0%, #7e22ce 100%);
-  color: white;
-  padding: 3rem 2rem;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  border-radius: 16px;
+  padding: 3.5rem 2rem;
   text-align: center;
+  color: white;
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.2);
 }
 
 .joinBox h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  font-weight: 800;
 }
 
 .joinBox p {
+  font-size: 1.2rem;
   margin-bottom: 2rem;
   opacity: 0.9;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Connection Status Page Styles */
@@ -1529,22 +2272,23 @@
 /* Navigation Cards for main sections */
 .navigationCards {
   width: 100%;
-  max-width: 1100px;
-  margin: 3rem 0;
+  max-width: 1200px;
+  margin: 5rem auto 6rem;
   padding: 0 1rem;
 }
 
 .navigationCards h2 {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  font-size: 2.4rem;
+  margin-bottom: 3rem;
   color: #1e293b;
+  font-weight: 800;
 }
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
 }
 
 .navCard {
@@ -1552,36 +2296,36 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  padding: 2.2rem 1.8rem;
   text-decoration: none;
   color: #1e293b;
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
   height: 100%;
-  min-height: 200px;
+  min-height: 220px;
 }
 
 .navCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
 .donorCard {
-  border-top: 4px solid #2563eb;
+  border-top: 5px solid #2563eb;
 }
 
 .ngoCard {
-  border-top: 4px solid #10b981;
+  border-top: 5px solid #10b981;
 }
 
 .milestoneCard {
-  border-top: 4px solid #f59e0b;
+  border-top: 5px solid #f59e0b;
 }
 
 .checkCard {
-  border-top: 4px solid #8b5cf6;
+  border-top: 5px solid #8b5cf6;
 }
 
 .cardContent {
@@ -1589,31 +2333,147 @@
 }
 
 .cardIcon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 3rem;
+  margin-bottom: 1.2rem;
 }
 
 .navCard h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
   color: #1e293b;
+  font-weight: 700;
 }
 
 .navCard p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #64748b;
-  line-height: 1.5;
+  line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 .cardArrow {
   align-self: flex-end;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  margin-top: 1rem;
   color: #94a3b8;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .navCard:hover .cardArrow {
-  transform: translateX(5px);
+  transform: translateX(8px);
   color: #2563eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .heroBanner h1 {
+    font-size: 1.8rem;
+  }
+  
+  .statBlock {
+    min-width: 100px;
+  }
+  
+  .step {
+    min-width: 100%;
+  }
+  
+  .aidUpdateCard {
+    max-width: 100%;
+  }
+
+  .filterPanel {
+    flex-direction: column;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .checkboxGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .heroBanner {
+    padding: 4rem 2rem;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .heroBanner h1 {
+    font-size: 2.6rem;
+  }
+  
+  .heroBanner p {
+    font-size: 1.2rem;
+    max-width: 100%;
+  }
+  
+  .heroButtons {
+    justify-content: center;
+  }
+
+  .trustPoints {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkboxGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroBanner {
+    padding: 3rem 1.5rem;
+  }
+  
+  .heroBanner h1 {
+    font-size: 2.2rem;
+  }
+  
+  .heroBanner p {
+    font-size: 1.1rem;
+  }
+  
+  .heroButtons {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .primaryButton, .secondaryButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  .statsPanel {
+    padding: 1rem;
+  }
+  
+  .statBlock {
+    padding: 1rem;
+    min-width: 140px;
+  }
+  
+  .statValue {
+    font-size: 2rem;
+  }
+  
+  .statLabel {
+    font-size: 0.9rem;
+  }
+  
+  .step {
+    padding: 2rem 1.2rem;
+  }
+  
+  .navigationCards {
+    margin: 3rem auto 4rem;
+  }
+  
+  .navigationCards h2 {
+    font-size: 2rem;
+  }
 }
