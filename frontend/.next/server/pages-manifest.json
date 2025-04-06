@@ -3,5 +3,6 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/": "pages/index.js",
-  "/connection-check": "pages/connection-check.js"
+  "/connection-check": "pages/connection-check.js",
+  "/donor-dashboard": "pages/donor-dashboard.js"
 }

@@ -1525,3 +1525,95 @@
   background-color: #93c5fd;
   cursor: not-allowed;
 }
+
+/* Navigation Cards for main sections */
+.navigationCards {
+  width: 100%;
+  max-width: 1100px;
+  margin: 3rem 0;
+  padding: 0 1rem;
+}
+
+.navigationCards h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #1e293b;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.navCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  text-decoration: none;
+  color: #1e293b;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+  height: 100%;
+  min-height: 200px;
+}
+
+.navCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.donorCard {
+  border-top: 4px solid #2563eb;
+}
+
+.ngoCard {
+  border-top: 4px solid #10b981;
+}
+
+.milestoneCard {
+  border-top: 4px solid #f59e0b;
+}
+
+.checkCard {
+  border-top: 4px solid #8b5cf6;
+}
+
+.cardContent {
+  flex: 1;
+}
+
+.cardIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.navCard h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: #1e293b;
+}
+
+.navCard p {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.cardArrow {
+  align-self: flex-end;
+  font-size: 1.2rem;
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.navCard:hover .cardArrow {
+  transform: translateX(5px);
+  color: #2563eb;
+}

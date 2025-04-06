@@ -48,7 +48,7 @@ export const URGENCY_LEVELS = {
 };
 
 // Initialize Web3 and contract instances
-export const initWeb3 = async () => {
+export const initWeb3 = async (forceConnect = false) => {
   try {
     let accounts = [];
     
@@ -57,36 +57,39 @@ export const initWeb3 = async () => {
       console.log("Found window.ethereum, attempting to connect");
       
       try {
-        // Request account access if needed
-        accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        console.log("Accounts: ", accounts);
+        // Request account access if needed or if force connect is true
+        if (forceConnect) {
+          accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          console.log("Forced connect accounts:", accounts);
+        } else {
+          // Just get accounts without prompting
+          accounts = await window.ethereum.request({ method: 'eth_accounts' });
+          console.log("Current accounts:", accounts);
+        }
         
         // Create Web3 instance
         web3 = new Web3(window.ethereum);
         
-        // Set up event listeners for account/network changes
-        window.ethereum.on('accountsChanged', (newAccounts) => {
-          console.log('accountsChanged', newAccounts);
-          // Reload the page to reset the state
-          window.location.reload();
-        });
-        
-        window.ethereum.on('chainChanged', (chainId) => {
-          console.log('chainChanged', chainId);
-          // Reload the page to reset the state
-          window.location.reload();
-        });
-        
-        window.ethereum.on('disconnect', () => {
-          console.log('disconnect');
-          web3 = null;
-          // Reload the page to reset the state
-          window.location.reload();
-        });
-        
+        // Set up event listeners for account/network changes if they don't exist
+        if (!window.ethereum._events || !window.ethereum._events.accountsChanged) {
+          window.ethereum.on('accountsChanged', (newAccounts) => {
+            console.log('accountsChanged', newAccounts);
+            // Dispatch a custom event that components can listen for
+            window.dispatchEvent(new CustomEvent('walletAccountChanged', { detail: newAccounts }));
+          });
+          
+          window.ethereum.on('chainChanged', (chainId) => {
+            console.log('chainChanged', chainId);
+            window.dispatchEvent(new CustomEvent('walletChainChanged', { detail: chainId }));
+          });
+          
+          window.ethereum.on('disconnect', (error) => {
+            console.log('disconnect', error);
+            window.dispatchEvent(new CustomEvent('walletDisconnected'));
+          });
+        }
       } catch (error) {
         console.error("Error requesting account access:", error);
-        // Don't throw, continue with read-only access
       }
     } else if (typeof window !== 'undefined' && window.web3) {
       // Legacy support for older MetaMask/Web3 implementations
@@ -119,10 +122,10 @@ export const initWeb3 = async () => {
       }
     }
     
-    return { web3, accounts };
+    return { web3, accounts, connected: accounts.length > 0 };
   } catch (error) {
     console.error("Error initializing web3:", error);
-    return { web3: null, accounts: [] };
+    return { web3: null, accounts: [], connected: false };
   }
 };
 
@@ -153,21 +156,24 @@ export const checkWeb3Connection = async () => {
 export const connectWallet = async () => {
   if (typeof window !== 'undefined' && window.ethereum) {
     try {
-      // Request account access
-      const accounts = await window.ethereum.request({ 
-        method: 'eth_requestAccounts' 
-      });
+      // Force request account access with UI prompt
+      const result = await initWeb3(true);
       
-      // Reinitialize web3
-      const result = await initWeb3();
+      if (!result.connected) {
+        return { 
+          success: false, 
+          error: "User denied account access"
+        };
+      }
       
       // Check if we're on the right network
       const networkId = await web3.eth.net.getId();
+      const networkType = await web3.eth.net.getNetworkType();
+      
       const expectedNetwork = process.env.NEXT_PUBLIC_NETWORK_ID || '1';
+      const networkName = process.env.NEXT_PUBLIC_NETWORK_NAME || 'Ethereum Mainnet';
       
       if (networkId.toString() !== expectedNetwork) {
-        const networkName = process.env.NEXT_PUBLIC_NETWORK_NAME || 'Ethereum Mainnet';
-        
         // Prompt user to switch networks
         try {
           await window.ethereum.request({
@@ -178,15 +184,23 @@ export const connectWallet = async () => {
           console.error("Failed to switch networks:", switchError);
           return { 
             success: false, 
-            error: `Please switch to ${networkName} in your wallet` 
+            error: `Please switch to ${networkName} in your wallet`
           };
         }
       }
       
+      // Save connected status to localStorage
+      try {
+        localStorage.setItem('walletConnected', 'true');
+      } catch (e) {
+        console.warn('Failed to save connection state to localStorage:', e);
+      }
+      
       return { 
         success: true, 
-        address: accounts[0],
-        networkId
+        address: result.accounts[0],
+        networkId,
+        networkType
       };
     } catch (error) {
       console.error("Failed to connect wallet:", error);
@@ -574,6 +588,28 @@ export const getContractAddresses = () => {
     fundPool: FUND_POOL_ADDRESS,
     donationTracker: DONATION_TRACKER_ADDRESS
   };
+};
+
+// Check if wallet was previously connected
+export const checkPreviousConnection = async () => {
+  try {
+    // Check localStorage for previous connection
+    const wasConnected = localStorage.getItem('walletConnected') === 'true';
+    
+    if (wasConnected) {
+      // Try to reconnect silently
+      const { connected, accounts } = await initWeb3(false);
+      
+      if (connected) {
+        return { connected, address: accounts[0] };
+      }
+    }
+    
+    return { connected: false };
+  } catch (e) {
+    console.warn('Error checking previous connection:', e);
+    return { connected: false };
+  }
 };
 
 export default {

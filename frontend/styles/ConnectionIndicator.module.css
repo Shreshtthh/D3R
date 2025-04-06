@@ -1,0 +1,105 @@
+.connectionBanner {
+  width: 100%;
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.connected {
+  background-color: #ecfdf5;
+}
+
+.disconnected {
+  background-color: #fef2f2;
+}
+
+.connectionContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.connectionStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.connected .dot {
+  background-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.disconnected .dot {
+  background-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.statusText {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.connected .statusText {
+  color: #047857;
+}
+
+.disconnected .statusText {
+  color: #b91c1c;
+}
+
+.networkBadge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  margin-left: 0.5rem;
+}
+
+.connectionActions {
+  display: flex;
+  align-items: center;
+}
+
+.checkConnection {
+  font-size: 0.8rem;
+  color: #2563eb;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.checkConnection:hover {
+  background-color: #dbeafe;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .connectionContent {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  .connectionStatus {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .networkBadge {
+    margin-top: 0.25rem;
+  }
+}
