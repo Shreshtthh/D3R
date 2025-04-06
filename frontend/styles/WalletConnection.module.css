@@ -1,0 +1,68 @@
+.walletConnection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 1rem;
+  position: relative;
+}
+
+.connectButton {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.connectButton:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.connectButton:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.connected {
+  display: flex;
+  align-items: center;
+  background-color: #f0f9ff;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  border: 1px solid #bae6fd;
+  color: #0369a1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  display: inline-block;
+}
+
+.address {
+  font-family: monospace;
+}
+
+.error {
+  position: absolute;
+  top: 100%;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  width: 200px;
+  text-align: center;
+  z-index: 10;
+}

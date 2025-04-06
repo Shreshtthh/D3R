@@ -5,101 +5,168 @@ import "forge-std/Script.sol";
 import "../src/NGORegistry.sol";
 import "../src/FundPool.sol";
 import "../src/DonationTracker.sol";
+import "../src/IPFSVerifier.sol";
 import "../src/ChainlinkDisasterOracle.sol";
+import "../src/MilestoneFunding.sol";
+import "../src/D3RProtocol.sol";
 
-contract DeployD3R is Script {
+contract DeployScript is Script {
     function run() external {
-        // Try to get private key directly
-        try vm.envUint("PRIVATE_KEY") returns (uint256 privateKey) {
-            // Deploy with the successfully parsed private key
-            deployWithPrivateKey(privateKey);
+        // Load Chainlink parameters with better error handling
+        address linkTokenAddress;
+        address oracleAddress;
+        bytes32 jobId;
+        uint256 fee;
+        
+        try vm.envAddress("LINK_TOKEN_ADDRESS") returns (address addr) {
+            linkTokenAddress = addr;
+            console.log("LINK token address:", linkTokenAddress);
         } catch {
-            // If that fails, try adding the 0x prefix
-            string memory rawKey = vm.envString("PRIVATE_KEY");
-            string memory prefixedKey = string(abi.encodePacked("0x", rawKey));
-            try vm.parseUint(prefixedKey) returns (uint256 privateKey) {
-                console.log("Added '0x' prefix to PRIVATE_KEY. Consider updating your environment variable.");
-                deployWithPrivateKey(privateKey);
+            // Use fallback address
+            linkTokenAddress = address(0x779877A7B0D9E8603169DdbD7836e478b4624789); // Default Sepolia LINK
+            console.log("Warning: Using default LINK token address:", linkTokenAddress);
+        }
+        
+        try vm.envAddress("ORACLE_ADDRESS") returns (address addr) {
+            oracleAddress = addr;
+            console.log("Oracle address:", oracleAddress);
+        } catch {
+            try vm.envAddress("CHAINLINK_ORACLE_ADDRESS") returns (address addr) {
+                oracleAddress = addr;
+                console.log("Oracle address (from CHAINLINK_ORACLE_ADDRESS):", oracleAddress);
             } catch {
-                console.log("Error: Invalid PRIVATE_KEY format. Must be a valid hexadecimal number.");
-                console.log("Example: export PRIVATE_KEY=0x123abc... or export PRIVATE_KEY=123abc...");
-                revert("PRIVATE_KEY parsing failed");
+                // Use deployer as fallback - we don't know the deployer address yet
+                // Will be set after startBroadcast
+                oracleAddress = address(0); // Temporary value
+                console.log("Warning: Oracle address not set, will use deployer address");
             }
         }
-    }
+        
+        try vm.envBytes32("JOB_ID") returns (bytes32 id) {
+            jobId = id;
+            console.log("Job ID loaded");
+        } catch {
+            try vm.envString("JOB_ID") returns (string memory id) {
+                jobId = stringToBytes32(id);
+                console.log("Job ID loaded from string");
+            } catch {
+                try vm.envString("CHAINLINK_JOB_ID") returns (string memory id) {
+                    jobId = stringToBytes32(id);
+                    console.log("Job ID loaded from CHAINLINK_JOB_ID");
+                } catch {
+                    // Use fallback job ID
+                    jobId = bytes32("29fa9aa13bf1468788b7cc4a500a45b8");
+                    console.log("Warning: Using default job ID");
+                }
+            }
+        }
+        
+        try vm.envUint("ORACLE_FEE") returns (uint256 value) {
+            fee = value;
+            console.log("Oracle fee:", fee);
+        } catch {
+            try vm.envUint("CHAINLINK_FEE") returns (uint256 value) {
+                fee = value;
+                console.log("Oracle fee (from CHAINLINK_FEE):", fee);
+            } catch {
+                // Use fallback fee (0.1 LINK)
+                fee = 100000000000000000;
+                console.log("Warning: Using default oracle fee (0.1 LINK)");
+            }
+        }
 
-    function deployWithPrivateKey(uint256 deployerPrivateKey) internal {
-        // Start broadcasting transactions
-        vm.startBroadcast(deployerPrivateKey);
+        // Start deployment - this will use the private key provided via --private-key flag
+        // No need to explicitly load the private key in the script
+        vm.startBroadcast();
+        
+        // If oracle address was not set, use the deployer address
+        address deployerAddress = msg.sender;
+        console.log("Deployer address:", deployerAddress);
+        
+        if (oracleAddress == address(0)) {
+            oracleAddress = deployerAddress;
+            console.log("Setting oracle address to deployer:", oracleAddress);
+        }
 
-        // Owner address
-        address owner = 0x06eDF1ee5162DAD61BC75A4e60EaEC3228DceDEe;
-
-        // Deploy contracts in correct order
+        // Deploy the component contracts
         console.log("Deploying NGORegistry...");
-        NGORegistry registry = new NGORegistry(owner);
-        console.log("NGORegistry deployed at:", address(registry));
+        NGORegistry ngoRegistry = new NGORegistry(deployerAddress);
+        console.log("NGORegistry deployed at:", address(ngoRegistry));
 
         console.log("Deploying FundPool...");
-        FundPool fundPool = new FundPool(address(registry));
+        FundPool fundPool = new FundPool(address(ngoRegistry));
         console.log("FundPool deployed at:", address(fundPool));
 
         console.log("Deploying DonationTracker...");
-        DonationTracker tracker = new DonationTracker(address(fundPool));
-        console.log("DonationTracker deployed at:", address(tracker));
+        DonationTracker donationTracker = new DonationTracker(address(fundPool));
+        console.log("DonationTracker deployed at:", address(donationTracker));
 
-        // Get Chainlink parameters from environment
-        address linkToken = vm.envAddress("LINK_TOKEN_ADDRESS");
-        address oracle = vm.envAddress("CHAINLINK_ORACLE_ADDRESS");
-
-        // Handle the job ID
-        string memory jobIdStr = vm.envString("CHAINLINK_JOB_ID");
-        console.log("Original Chainlink Job ID:", jobIdStr);
-
-        // Remove 0x prefix if present
-        if (bytes(jobIdStr).length >= 2 && bytes(jobIdStr)[0] == "0" && bytes(jobIdStr)[1] == "x") {
-            bytes memory jobIdBytes = bytes(jobIdStr);
-            string memory trimmed = new string(jobIdBytes.length - 2);
-            for (uint256 i = 0; i < bytes(trimmed).length; i++) {
-                bytes(trimmed)[i] = jobIdBytes[i + 2];
-            }
-            jobIdStr = trimmed;
-        }
-
-        // Convert the string job ID to bytes32
-        bytes32 jobId = stringToBytes32(jobIdStr);
-        console.log("Job ID converted to bytes32 format");
-
-        uint256 fee = vm.envUint("CHAINLINK_FEE");
+        console.log("Deploying IPFSVerifier...");
+        IPFSVerifier ipfsVerifier = new IPFSVerifier();
+        console.log("IPFSVerifier deployed at:", address(ipfsVerifier));
 
         console.log("Deploying ChainlinkDisasterOracle...");
-        ChainlinkDisasterOracle chainlinkOracle = new ChainlinkDisasterOracle(linkToken, oracle, jobId, fee);
-        console.log("ChainlinkDisasterOracle deployed at:", address(chainlinkOracle));
+        ChainlinkDisasterOracle disasterOracle =
+            new ChainlinkDisasterOracle(linkTokenAddress, oracleAddress, jobId, fee);
+        console.log("ChainlinkDisasterOracle deployed at:", address(disasterOracle));
 
-        // Setup contract relationships
-        console.log("Setting up contract relationships...");
-        fundPool.setTrackerAuthorization(address(tracker), true);
-        console.log("Authorized DonationTracker to release funds");
+        // Deploy MilestoneFunding contract
+        console.log("Deploying MilestoneFunding...");
+        MilestoneFunding milestoneFunding = new MilestoneFunding(
+            oracleAddress,
+            jobId,
+            fee,
+            address(ngoRegistry)
+        );
+        console.log("MilestoneFunding deployed at:", address(milestoneFunding));
 
-        // Transfer contract ownership to the specified owner if needed
-        if (owner != msg.sender) {
-            fundPool.transferOwnership(owner);
-            tracker.transferOwnership(owner);
-            chainlinkOracle.transferOwnership(owner);
-            console.log("Transferred ownership of contracts to:", owner);
+        // Set the IPFS verifier in MilestoneFunding
+        console.log("Setting IPFSVerifier in MilestoneFunding...");
+        milestoneFunding.setIPFSVerifier(address(ipfsVerifier));
+        console.log("IPFSVerifier set in MilestoneFunding");
+
+        // Deploy the main protocol contract
+        console.log("Deploying D3RProtocol...");
+        D3RProtocol protocol = new D3RProtocol(
+            address(ngoRegistry),
+            address(fundPool),
+            address(donationTracker),
+            address(milestoneFunding),
+            address(ipfsVerifier),
+            address(disasterOracle)
+        );
+        console.log("D3RProtocol deployed at:", address(protocol));
+
+        // Authorize the tracker and protocol in FundPool
+        console.log("Authorizing contracts in FundPool...");
+        fundPool.setTrackerAuthorization(address(donationTracker), true);
+        console.log("DonationTracker authorized in FundPool");
+        fundPool.setTrackerAuthorization(address(protocol), true);
+        console.log("D3RProtocol authorized in FundPool");
+
+        // Output all addresses in a standard format for easier parsing
+        console.log("\n=== Contract Addresses ===");
+        console.log("ngoRegistry:", address(ngoRegistry));
+        console.log("fundPool:", address(fundPool));
+        console.log("donationTracker:", address(donationTracker));
+        console.log("milestoneFunding:", address(milestoneFunding));
+        console.log("ipfsVerifier:", address(ipfsVerifier));
+        console.log("disasterOracle:", address(disasterOracle));
+        console.log("d3rProtocol:", address(protocol));
+        
+        console.log("\nDeployment completed successfully!");
+
+        vm.stopBroadcast();
+    }
+    
+    // Convert a string to bytes32
+    function stringToBytes32(string memory source) internal pure returns (bytes32 result) {
+        bytes memory tempEmptyStringTest = bytes(source);
+        if (tempEmptyStringTest.length == 0) {
+            return 0x0;
         }
 
-        // Stop broadcasting transactions
-        vm.stopBroadcast();
-
-        console.log("Deployment complete!");
-    }
-
-    // Helper function to convert string to bytes32
-    function stringToBytes32(string memory source) internal pure returns (bytes32 result) {
         assembly {
-            // This assembly code loads the string data directly into a bytes32
-            // It works for strings up to 32 bytes long
             result := mload(add(source, 32))
         }
     }

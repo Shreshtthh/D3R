@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block-Donate API Server</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        h1 {
+            color: #0070f3;
+        }
+        .endpoint {
+            background-color: #f7f7f7;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .method {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .get {
+            background-color: #61affe;
+            color: white;
+        }
+        .post {
+            background-color: #49cc90;
+            color: white;
+        }
+        code {
+            background-color: #eee;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Block-Donate API Server</h1>
+    <p>Welcome to the Block-Donate API server. This server provides backend functionality for the Block-Donate DApp.</p>
+    
+    <h2>Available Endpoints</h2>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/contract-addresses</code>
+        <p>Returns the addresses of deployed smart contracts.</p>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/ngo/register</code>
+        <p>Register a new NGO with verification documents.</p>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/milestone/proof</code>
+        <p>Submit proof for a project milestone.</p>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/disaster/register</code>
+        <p>Register a new disaster with evidence.</p>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/disaster/verification/:disasterId</code>
+        <p>Get verification status for a disaster.</p>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/ipfs/upload</code>
+        <p>Upload a file to IPFS.</p>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/ipfs/status</code>
+        <p>Check if IPFS service is available.</p>
+    </div>
+    
+    <h2>Frontend Connection</h2>
+    <p>The frontend DApp connects to this API server to perform blockchain operations and IPFS uploads.</p>
+    <p>Make sure the frontend is configured with the correct API URL (default: <code>http://localhost:3000</code>).</p>
+    
+    <footer style="margin-top: 3rem; text-align: center; color: #666;">
+        <p>Block-Donate &copy; 2023</p>
+    </footer>
+</body>
+</html>

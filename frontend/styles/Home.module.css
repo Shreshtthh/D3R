@@ -1,0 +1,1527 @@
+.container {
+  padding: 0 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  border-top: 1px solid #eaeaea;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.highlight {
+  color: #0070f3;
+}
+
+.description {
+  text-align: center;
+  line-height: 1.5;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+.grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin-top: 3rem;
+}
+
+.card {
+  margin: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  width: 300px;
+}
+
+.card:hover,
+.card:focus,
+.card:active {
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.card p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.form {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.formRow {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.formRow .formGroup {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.formInput,
+.formTextarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.formTextarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.formGroup small {
+  display: block;
+  margin-top: 0.3rem;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.checkboxGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.checkboxItem {
+  display: flex;
+  align-items: center;
+}
+
+.checkboxItem input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.formActions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  background: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: #0051a2;
+}
+
+.button:disabled {
+  background: #99c2ff;
+  cursor: not-allowed;
+}
+
+.statusMessage {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.success {
+  background: #e6ffe6;
+  color: #0a5c0a;
+  border: 1px solid #b3ffb3;
+}
+
+.error {
+  background: #ffe6e6;
+  color: #9c0000;
+  border: 1px solid #ffb3b3;
+}
+
+.verificationNote {
+  background: #f9f9f9;
+  border-left: 4px solid #0070f3;
+  padding: 1.5rem;
+  margin-top: 3rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.dashboard {
+  width: 100%;
+  max-width: 800px;
+}
+
+.projectCard {
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.connectionStatus {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.connectionStatus .connected {
+  color: green;
+  font-weight: bold;
+}
+
+.connectionStatus .disconnected {
+  color: red;
+  font-weight: bold;
+}
+
+.link {
+  margin-left: 1rem;
+  color: #0070f3;
+  text-decoration: underline;
+}
+
+/* Hero Banner */
+.heroBanner {
+  width: 100%;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  color: white;
+  padding: 4rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.heroContent {
+  flex: 1;
+}
+
+.heroBanner h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.heroBanner p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.primaryButton {
+  display: inline-block;
+  background-color: white;
+  color: #2563eb;
+  font-weight: 600;
+  padding: 0.9rem 2rem;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.secondaryButton {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 600;
+  padding: 0.9rem 2rem;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.heroImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroImage img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Stats Panel */
+.statsPanel {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.statBlock {
+  text-align: center;
+  padding: 1rem;
+  min-width: 120px;
+}
+
+.statBlock h3 {
+  font-size: 1.8rem;
+  color: #0070f3;
+  margin: 0;
+}
+
+.statBlock p {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* How It Works section */
+.howItWorks {
+  width: 100%;
+  max-width: 1000px;
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.howItWorks h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.stepsContainer {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.step {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  background: #0070f3;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin: 0 auto 1rem;
+}
+
+/* Recent Aid section */
+.recentAid {
+  width: 100%;
+  max-width: 1000px;
+  margin: 3rem auto;
+}
+
+.recentAid h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.aidUpdates {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.aidUpdateCard {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 320px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.aidUpdateCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.aidUpdateCard h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.urgencyBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ff3e3e;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+}
+
+.viewButton {
+  display: inline-block;
+  background: #0070f3;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.viewButton:hover {
+  background: #0051a2;
+}
+
+/* Campaign filter panel */
+.filterPanel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.filterSelect,
+.filterInput {
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.filterButton {
+  background: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.filterButton:hover {
+  background: #0051a2;
+}
+
+/* Campaign grid */
+.campaignsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.campaignCard {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.campaignCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.campaignHeader {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.urgencyIndicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  color: white;
+}
+
+.urgencyIndicator[data-urgency="CRITICAL"] {
+  background: #ff3e3e;
+}
+
+.urgencyIndicator[data-urgency="HIGH"] {
+  background: #ff8c1a;
+}
+
+.urgencyIndicator[data-urgency="MEDIUM"] {
+  background: #ffcc00;
+}
+
+.urgencyIndicator[data-urgency="LOW"] {
+  background: #6699ff;
+}
+
+.urgencyIndicator[data-urgency="RECOVERY"] {
+  background: #66cc66;
+}
+
+.campaignDetails {
+  margin-bottom: 1.5rem;
+}
+
+.fundingProgress {
+  margin-bottom: 1.5rem;
+}
+
+.progressBar {
+  height: 10px;
+  background: #f0f0f0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: #0070f3;
+  border-radius: 5px;
+}
+
+.fundingDetails {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.campaignActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.donationInput {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.donateButton {
+  background: #0070f3;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.donateButton:hover {
+  background: #0051a2;
+}
+
+.viewDetailsLink {
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+  color: #0070f3;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.viewDetailsLink:hover {
+  text-decoration: underline;
+}
+
+.transparencyLink {
+  display: block;
+  text-align: right;
+  font-size: 0.8rem;
+  color: #666;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.transparencyLink:hover {
+  color: #0070f3;
+}
+
+.noCampaigns {
+  text-align: center;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .heroBanner h1 {
+    font-size: 1.8rem;
+  }
+  
+  .statBlock {
+    min-width: 100px;
+  }
+  
+  .step {
+    min-width: 100%;
+  }
+  
+  .aidUpdateCard {
+    max-width: 100%;
+  }
+
+  .filterPanel {
+    flex-direction: column;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .checkboxGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkboxGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Add these styles to your existing CSS file */
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Stats Dashboard */
+.statsPanel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem 0 2rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.statBlock {
+  background: linear-gradient(145deg, #f0f6ff 0%, #e6f0ff 100%);
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+  width: 180px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.statBlock:hover {
+  transform: translateY(-5px);
+}
+
+.statValue {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2563eb;
+  margin-bottom: 0.3rem;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Info Box */
+.infoBox {
+  display: flex;
+  align-items: center;
+  background-color: #f0f9ff;
+  border-left: 4px solid #3b82f6;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 6px;
+  max-width: 900px;
+}
+
+.infoIcon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.infoBox p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Loading State */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.loadingSpinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border-left-color: #3b82f6;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Campaign Cards Improvements */
+.campaignCard {
+  border: none;
+  border-radius: 12px;
+  padding: 1.5rem;
+  background-color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.campaignCard:hover {
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+}
+
+.urgencyIndicator {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 0.8rem;
+}
+
+.urgencyIndicator[data-urgency="CRITICAL"] {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.urgencyIndicator[data-urgency="HIGH"] {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.urgencyIndicator[data-urgency="MEDIUM"] {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+}
+
+.urgencyIndicator[data-urgency="LOW"] {
+  background-color: #ecfdf5;
+  color: #047857;
+}
+
+.urgencyIndicator[data-urgency="RECOVERY"] {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.campaignDetails {
+  margin: 1.2rem 0;
+  padding: 0.8rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+}
+
+.campaignDetails p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.campaignActions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.donationInput {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+.donateButton {
+  background-color: #2563eb;
+  color: white;
+  padding: 0 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.donateButton:hover {
+  background-color: #1d4ed8;
+}
+
+.campaignFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.viewDetailsLink, .transparencyLink {
+  font-size: 0.9rem;
+  color: #4b5563;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.viewDetailsLink:hover, .transparencyLink:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* How It Works Section */
+.howItWorks {
+  margin-top: 4rem;
+  width: 100%;
+  max-width: 1000px;
+  padding: 2rem 0;
+}
+
+.howItWorks h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  color: #1f2937;
+}
+
+.stepsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.step {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: relative;
+}
+
+.stepNumber {
+  width: 36px;
+  height: 36px;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin: 0 auto 1rem;
+}
+
+.step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: #1f2937;
+}
+
+.step p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Enhanced verification badge */
+.verificationBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.verificationBadge[data-verified="true"] {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.verificationBadge[data-verified="false"] {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Milestone progress visualization */
+.milestoneProgress {
+  margin: 1.2rem 0;
+}
+
+.milestoneBar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  height: 10px;
+  width: 100%;
+  background-color: #f3f4f6;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.milestone {
+  flex: 1;
+  margin: 0 1px;
+  background-color: #e5e7eb;
+  transition: background-color 0.3s ease;
+}
+
+.completedMilestone {
+  background-color: #2563eb;
+}
+
+/* Error message box */
+.errorBox {
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  text-align: center;
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  border-radius: 6px;
+  color: #b91c1c;
+}
+
+.retryButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #b91c1c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #991b1b;
+}
+
+/* Protocol info section */
+.protocolInfo {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.protocolInfo h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+  font-size: 1.3rem;
+}
+
+.contractTable {
+  width: 100%;
+}
+
+.contractRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.contractRow:last-child {
+  border-bottom: none;
+}
+
+.contractName {
+  font-family: monospace;
+  font-weight: bold;
+  color: #1e40af;
+}
+
+.contractDescription {
+  color: #64748b;
+  text-align: right;
+}
+
+/* Update steps to match 5-step process */
+.stepsContainer {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+  .statsPanel {
+    gap: 1rem;
+  }
+  
+  .statBlock {
+    width: calc(50% - 1rem);
+    padding: 1rem;
+  }
+  
+  .campaignActions {
+    flex-direction: column;
+  }
+  
+  .stepsContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Updated Protocol info section with contract addresses */
+.protocolInfo {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.protocolInfo h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+  font-size: 1.3rem;
+}
+
+.contractTable {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.contractRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+}
+
+.contractRow:last-child {
+  border-bottom: none;
+}
+
+.contractName {
+  font-family: monospace;
+  font-weight: bold;
+  color: #1e40af;
+  white-space: nowrap;
+}
+
+.contractAddress {
+  font-family: monospace;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 1rem;
+  max-width: 60%;
+}
+
+.contractAddress a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contractAddress a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* NGO name styling */
+.ngoName {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+/* Improved verification badge */
+.verificationBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  margin-bottom: 0.6rem;
+  cursor: help;
+}
+
+.verificationBadge[data-verified="true"] {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.verificationBadge[data-verified="false"] {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+/* Connection status indicator */
+.connectionStatus {
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+}
+
+.connected {
+  color: #16a34a;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+.disconnected {
+  color: #dc2626;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* Impact Section */
+.impactSection {
+  width: 100%;
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.impactSection h2 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: #1e293b;
+}
+
+/* Featured Campaigns */
+.featuredCampaigns {
+  width: 100%;
+  margin: 4rem 0;
+}
+
+.featuredCampaigns h2 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #1e293b;
+}
+
+.campaignsPreview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.campaignPreviewCard {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e7eb;
+}
+
+.campaignPreviewCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+.campaignPreviewCard h3 {
+  margin: 1rem 0;
+  font-size: 1.3rem;
+  color: #1e293b;
+}
+
+.campaignLocation {
+  color: #64748b;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.progressBarSmall {
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.campaignStats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.viewCampaignButton {
+  background-color: #f8fafc;
+  color: #2563eb;
+  padding: 0.6rem 0;
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+
+.viewCampaignButton:hover {
+  background-color: #e0e7ff;
+  border-color: #c7d2fe;
+}
+
+.viewAllContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.viewAllButton {
+  display: inline-block;
+  background-color: #f1f5f9;
+  color: #2563eb;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.viewAllButton:hover {
+  background-color: #e0e7ff;
+}
+
+/* Trust Section */
+.trustSection {
+  width: 100%;
+  margin: 5rem 0 2rem;
+  text-align: center;
+  padding: 3rem 0;
+  background-color: #f8fafc;
+  border-radius: 12px;
+}
+
+.trustSection h2 {
+  font-size: 2.2rem;
+  margin-bottom: 3rem;
+  color: #1e293b;
+}
+
+.trustPoints {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.trustPoint {
+  text-align: center;
+}
+
+.trustIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background-color: #e0e7ff;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.trustPoint h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #1e293b;
+}
+
+.trustPoint p {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Join Section */
+.joinSection {
+  width: 100%;
+  margin: 5rem 0;
+}
+
+.joinBox {
+  background: linear-gradient(135deg, #4f46e5 0%, #7e22ce 100%);
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.joinBox h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.joinBox p {
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+/* Connection Status Page Styles */
+.statusPanel, .contractsPanel, .projectsPanel {
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contractList {
+  margin-top: 1rem;
+}
+
+.contractItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.contractItem:last-child {
+  border-bottom: none;
+}
+
+.contractName {
+  font-weight: 500;
+  color: #334155;
+}
+
+.connected {
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.disconnected {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.helpSection {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+}
+
+.helpSection h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #334155;
+}
+
+.helpTips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.helpTip {
+  background-color: #f0f9ff;
+  border-left: 4px solid #3b82f6;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+}
+
+.helpTip h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #1e3a8a;
+}
+
+.helpTip p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.retryButton {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.retryButton:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}

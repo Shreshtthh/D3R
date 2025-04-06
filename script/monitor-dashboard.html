@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3R Protocol Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            background-color: #4a6fa5;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-title {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #4a6fa5;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #3a5985;
+        }
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        .address {
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #3498db;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #network-info {
+            display: flex;
+            gap: 20px;
+        }
+        .network-badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background-color: #e9ecef;
+        }
+        #wallet-info {
+            font-size: 14px;
+        }
+        .balance {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>D3R Protocol Deployment Monitor</h1>
+            <div id="network-info">
+                <div class="network-badge" id="network-name">...</div>
+                <div id="wallet-info">
+                    Balance: <span class="balance" id="wallet-balance">...</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Contract Deployment Status</h2>
+                <button class="btn" id="refresh-btn">Refresh</button>
+            </div>
+            <table id="contract-table">
+                <thead>
+                    <tr>
+                        <th>Contract</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4">Loading contract data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Transaction Monitor</h2>
+                <div>
+                    <input type="file" id="broadcast-file" accept=".json" style="display: none;">
+                    <button class="btn" id="load-broadcast">Load Broadcast File</button>
+                </div>
+            </div>
+            <table id="tx-table">
+                <thead>
+                    <tr>
+                        <th>Transaction Hash</th>
+                        <th>Contract</th>
+                        <th>Status</th>
+                        <th>Gas Used</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5">No transactions loaded. Click "Load Broadcast File" to monitor transactions.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Sample contract data - this would be loaded from deployment_addresses.txt in a real app
+        let contracts = [
+            { name: "NGO Registry", address: "0x8e675e5C8efF2398D70eeeE62Bd85AB8084b8A01", status: "confirmed" },
+            { name: "Fund Pool", address: "0x52146d464e5DD3a7046940b85231007385AB3105", status: "confirmed" },
+            { name: "Donation Tracker", address: "0x97154aCFa6f5E85494D0EFd2332368b13b2Da8dc", status: "confirmed" },
+            { name: "Milestone Funding", address: "0xD09c0b1677107e25B78271dA70295580Bf8BEA52", status: "confirmed" },
+            { name: "IPFS Verifier", address: "0x4DF627FCDf639D6a4dc420924Df6709e404493c4", status: "confirmed" },
+            { name: "Disaster Oracle", address: "0x109457d4c8501174f774339E4B37635e3f818C94", status: "confirmed" },
+            { name: "D3R Protocol", address: "0xB0C04bF81c2D64cC5Ae4CCeaFe6906D391476304", status: "confirmed" }
+        ];
+
+        // Sample transaction data - would come from the broadcast JSON in a real app
+        let transactions = [];
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateContractTable();
+            setupEventListeners();
+            updateNetworkInfo();
+
+            // Demo: add a few sample transactions
+            transactions = [
+                { 
+                    hash: "0x72d97ff59fd65407e1383af34f94a7a46927e0ca1604f6053951f74c0d8ef683", 
+                    contract: "NGO Registry", 
+                    status: "pending",
+                    gasUsed: "-" 
+                },
+                { 
+                    hash: "0x32fbb886f7a8c643ab8520462feaf020ba4f873ad8c828d343b1a023f66ca374", 
+                    contract: "Fund Pool",
+                    status: "pending",
+                    gasUsed: "-"
+                }
+            ];
+            updateTransactionTable();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                updateContractTable();
+                updateTransactionStatuses();
+                updateNetworkInfo();
+            });
+
+            document.getElementById('load-broadcast').addEventListener('click', function() {
+                document.getElementById('broadcast-file').click();
+            });
+
+            document.getElementById('broadcast-file').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            parseBroadcastFile(data);
+                        } catch (error) {
+                            alert('Failed to parse JSON file: ' + error.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            });
+        }
+
+        function parseBroadcastFile(data) {
+            if (!data.transactions) {
+                alert('Invalid broadcast file format. No transactions found.');
+                return;
+            }
+
+            transactions = [];
+            data.transactions.forEach((tx, index) => {
+                transactions.push({
+                    hash: tx.hash,
+                    contract: tx.contractName || `Transaction ${index+1}`,
+                    status: "pending",
+                    gasUsed: "-"
+                });
+            });
+
+            updateTransactionTable();
+            updateTransactionStatuses();
+        }
+
+        function updateContractTable() {
+            const tableBody = document.getElementById('contract-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            contracts.forEach(contract => {
+                const row = tableBody.insertRow();
+                
+                // Contract name
+                const nameCell = row.insertCell();
+                nameCell.textContent = contract.name;
+                
+                // Contract address
+                const addressCell = row.insertCell();
+                const addressSpan = document.createElement('span');
+                addressSpan.className = 'address';
+                addressSpan.textContent = contract.address;
+                addressCell.appendChild(addressSpan);
+                
+                // Status
+                const statusCell = row.insertCell();
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'status ' + contract.status;
+                statusSpan.textContent = contract.status.charAt(0).toUpperCase() + contract.status.slice(1);
+                statusCell.appendChild(statusSpan);
+                
+                // Actions
+                const actionsCell = row.insertCell();
+                const viewBtn = document.createElement('button');
+                viewBtn.className = 'btn btn-small';
+                viewBtn.textContent = 'View on Etherscan';
+                viewBtn.onclick = function() {
+                    window.open(`https://sepolia.etherscan.io/address/${contract.address}`, '_blank');
+                };
+                actionsCell.appendChild(viewBtn);
+            });
+        }
+
+        function updateTransactionTable() {
+            const tableBody = document.getElementById('tx-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            if (transactions.length === 0) {
+                const row = tableBody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 5;
+                cell.textContent = 'No transactions loaded. Click "Load Broadcast File" to monitor transactions.';
+                return;
+            }
+            
+            transactions.forEach(tx => {
+                const row = tableBody.insertRow();
+                
+                // Transaction hash
+                const hashCell = row.insertCell();
+                const hashLink = document.createElement('a');
+                hashLink.href = `https://sepolia.etherscan.io/tx/${tx.hash}`;
+                hashLink.target = '_blank';
+                hashLink.className = 'address';
+                hashLink.textContent = tx.hash.substring(0, 10) + '...' + tx.hash.substring(tx.hash.length - 8);
+                hashCell.appendChild(hashLink);
+                
+                // Contract
+                const contractCell = row.insertCell();
+                contractCell.textContent = tx.contract;
+                
+                // Status
+                const statusCell = row.insertCell();
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'status ' + tx.status;
+                if (tx.status === 'pending') {
+                    const loader = document.createElement('span');
+                    loader.className = 'loader';
+                    statusCell.appendChild(loader);
+                }
+                statusSpan.textContent = tx.status.charAt(0).toUpperCase() + tx.status.slice(1);
+                statusCell.appendChild(statusSpan);
+                
+                // Gas used
+                const gasCell = row.insertCell();
+                gasCell.textContent = tx.gasUsed;
+                
+                // Actions
+                const actionsCell = row.insertCell();
+                if (tx.status === 'pending') {
+                    const speedUpBtn = document.createElement('button');
+                    speedUpBtn.className = 'btn btn-small';
+                    speedUpBtn.textContent = 'Speed Up';
+                    speedUpBtn.onclick = function() {
+                        alert(`To speed up transaction ${tx.hash}, run: ./script/speed-up-tx.sh ${tx.hash} 2.0`);
+                    };
+                    actionsCell.appendChild(speedUpBtn);
+                } else {
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'btn btn-small';
+                    viewBtn.textContent = 'View';
+                    viewBtn.onclick = function() {
+                        window.open(`https://sepolia.etherscan.io/tx/${tx.hash}`, '_blank');
+                    };
+                    actionsCell.appendChild(viewBtn);
+                }
+            });
+        }
+
+        function updateTransactionStatuses() {
+            // In a real application, this would call a backend API or web3 provider
+            // to check the status of each transaction
+            // For this demo, we'll just simulate status updates
+            transactions.forEach((tx, index) => {
+                if (tx.status === 'pending') {
+                    // 50% chance of confirming a pending transaction in this demo
+                    if (Math.random() > 0.5) {
+                        tx.status = 'confirmed';
+                        tx.gasUsed = Math.floor(Math.random() * 200000).toString();
+                    }
+                }
+            });
+            updateTransactionTable();
+        }
+
+        function updateNetworkInfo() {
+            // In a real app, this would use web3.js or ethers.js to get network info
+            document.getElementById('network-name').textContent = 'Sepolia Testnet';
+            document.getElementById('wallet-balance').textContent = '0.11553 ETH';
+        }
+    </script>
+</body>
+</html>

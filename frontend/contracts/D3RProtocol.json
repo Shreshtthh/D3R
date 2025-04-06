@@ -1,0 +1,73 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_ngoRegistry",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_fundPool",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_donationTracker",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_milestoneFunding",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_ipfsVerifier",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_disasterOracle",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_disasterId",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "_ngoAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "createReliefProject",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    }
+  ]
+}

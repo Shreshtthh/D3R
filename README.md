@@ -1,125 +1,94 @@
-# Blockchain Disaster Relief Platform
+# D3R - Decentralized Disaster Donation & Relief Platform
 
-A decentralized platform for disaster relief funding using blockchain technology.
+D3R is a blockchain-based platform for transparent and accountable disaster relief donations with milestone-based fund releases.
 
-## Prerequisites
+## Quick Start
 
-- Node.js v16+ and npm
-- Foundry (for smart contract deployment)
+1. Set up the project dependencies:
 
-## Installation
-
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   cd blockchain-d3r
-   ```
-
-2. Install dependencies:
-   ```
-   npm install
-   ```
-
-3. Install Forge dependencies:
-   ```
-   npm run install:deps
-   ```
-
-4. Configure environment variables:
-   ```
-   cp .env.example .env
-   ```
-   Then edit `.env` with your own values.
-
-## Installing Foundry
-
-To deploy contracts, you'll need Foundry. Install it with:
-
-### On Linux/macOS:
 ```bash
-curl -L https://foundry.paradigm.xyz | bash
-source ~/.bashrc  # or ~/.zshrc depending on your shell
-foundryup
+# On Linux/macOS:
+./setup.sh
+
+# On Windows:
+.\setup.bat
+
+# On Windows Subsystem for Linux (WSL):
+npm run wsl-setup
+
+# Or manually:
+npm run setup
 ```
 
-### On Windows:
-Install with PowerShell:
-```powershell
-Invoke-WebRequest -Uri "https://github.com/foundry-rs/foundry/releases/latest/download/foundry_nightly_win_x86_64.zip" -OutFile "foundry.zip"
-Expand-Archive -Path "foundry.zip" -DestinationPath "$HOME\.foundry"
-$env:Path += ";$HOME\.foundry\bin"
-[Environment]::SetEnvironmentVariable("Path", $env:Path, [System.EnvironmentVariableTarget]::User)
+2. Run the development server:
+
+```bash
+npm run dev
 ```
 
-## Deployment
+3. Open [http://localhost:4000](http://localhost:4000) with your browser to see the result.
 
-### Automatic Deployment
+## Troubleshooting
 
-To deploy all contracts:
+If you encounter any issues with the build or dependencies:
 
-## Foundry
+1. Clean the installation:
+```bash
+# On Linux/macOS:
+./clean.sh
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+# On Windows:
+.\clean.bat
 
-Foundry consists of:
+# On Windows Subsystem for Linux (WSL):
+npm run wsl-clean
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
+# Or using npm:
+npm run clean
 ```
 
-### Test
+2. Reinstall dependencies:
+```bash
+# On Linux/macOS:
+./setup.sh
 
-```shell
-$ forge test
+# On Windows:
+.\setup.bat
+
+# On Windows Subsystem for Linux (WSL):
+npm run wsl-setup
+
+# Or using npm:
+npm run setup
 ```
 
-### Format
+### Special Notes for WSL Users
 
-```shell
-$ forge fmt
-```
+When using WSL to run this project from a Windows filesystem location (e.g., `/mnt/c/Program Files/blockchain-d3r`):
 
-### Gas Snapshots
+1. Use the WSL-specific npm scripts: `npm run wsl-clean` and `npm run wsl-setup`
+2. You might encounter file permission issues. If so, within WSL, run:
+   ```bash
+   chmod +x *.sh
+   ```
+3. To avoid path issues, always navigate to the project directory before running commands
 
-```shell
-$ forge snapshot
-```
+## Smart Contracts
 
-### Anvil
+The D3R platform uses the following smart contracts:
 
-```shell
-$ anvil
-```
+- **D3RProtocol**: Main orchestration contract (0xB0C04bF81c2D64cC5Ae4CCeaFe6906D391476304)
+- **MilestoneFunding**: Handles milestone-based fund releases (0xD09c0b1677107e25B78271dA70295580Bf8BEA52)
+- **NGORegistry**: Verifies humanitarian organizations (0x8e675e5C8efF2398D70eeeE62Bd85AB8084b8A01)
+- **ChainlinkDisasterOracle**: Validates disaster information (0x109457d4c8501174f774339E4B37635e3f818C94)
+- **IPFSVerifier**: Validates evidence documentation (0x4DF627FCDf639D6a4dc420924Df6709e404493c4)
+- **FundPool**: Manages donation pools (0x52146d464e5DD3a7046940b85231007385AB3105)
+- **DonationTracker**: Tracks donations and reports (0x97154aCFa6f5E85494D0EFd2332368b13b2Da8dc)
 
-### Deploy
+## Features
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+- Transparent disaster relief donations on the blockchain
+- Milestone-based fund releases with verification
+- Chainlink Oracle integration for disaster verification
+- IPFS integration for storing and verifying relief documentation
+- NGO verification system

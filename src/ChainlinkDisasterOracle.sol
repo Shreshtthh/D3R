@@ -4,26 +4,9 @@ pragma solidity ^0.8.20;
 // Import directly from Chainlink implementation if available
 // If not, we'll use a simplified version
 import "@openzeppelin/contracts/access/Ownable.sol";
-
-// Define a simplified interface for the Chainlink functionality we need
-interface LinkTokenInterface {
-    function transferAndCall(address to, uint256 amount, bytes calldata data) external returns (bool success);
-    function transfer(address to, uint256 value) external returns (bool success);
-    function balanceOf(address owner) external view returns (uint256 balance);
-}
-
-interface ChainlinkRequestInterface {
-    function oracleRequest(
-        address sender,
-        uint256 payment,
-        bytes32 id,
-        address callbackAddress,
-        bytes4 callbackFunctionId,
-        uint256 nonce,
-        uint256 dataVersion,
-        bytes calldata data
-    ) external;
-}
+// Use our simplified interfaces instead of external dependencies
+import "./interfaces/LinkTokenInterface.sol";
+import "./interfaces/ChainlinkRequestInterface.sol";
 
 /**
  * @title ChainlinkDisasterOracle

@@ -2,140 +2,166 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
-import "../src/NGORegistry.sol";
-import "../src/FundPool.sol";
 import "../src/DonationTracker.sol";
+import "./mocks/MockFundPool.sol";
 
 contract DonationTrackerTest is Test {
-    NGORegistry public registry;
-    FundPool public fundPool;
     DonationTracker public tracker;
-
-    address owner = address(1);
-    address ngo = address(2);
-    address donor = address(3);
-
+    MockFundPool public fundPool;
+    
+    address public owner;
+    address public ngo;
+    address public donor;
+    address public nonOwner;
+    
+    uint256 public fundId = 1;
+    uint256 public milestoneIndex = 0;
+    string public description = "First milestone report";
+    string public proofCID = "QmZ4tDuvesekSs4qM5ZBKpXiZGun7S2CYtEZRB3DYXkjGx";
+    
+    event ReportSubmitted(uint256 indexed fundId, uint256 indexed milestoneIndex, string description, string proofCID);
+    event ReportApproved(uint256 indexed fundId, uint256 indexed milestoneIndex);
+    event ReportRejected(uint256 indexed fundId, uint256 indexed milestoneIndex, string reason);
+    
     function setUp() public {
-        // Deploy and configure the contracts
-        vm.startPrank(owner);
-        registry = new NGORegistry(owner);
-
-        // Register and verify NGO
-        vm.stopPrank();
-        vm.startPrank(ngo);
-        registry.registerNGO("Test NGO", "https://testngo.org", "contact@testngo.org");
-        vm.stopPrank();
-        vm.prank(owner);
-        registry.verifyNGO(ngo, true);
-
-        // Deploy FundPool
-        vm.prank(owner);
-        fundPool = new FundPool(address(registry));
-
+        owner = address(this);
+        ngo = address(0x123);
+        donor = address(0x456);
+        nonOwner = address(0x789);
+        
+        // Deploy mock FundPool
+        fundPool = new MockFundPool();
+        
         // Deploy DonationTracker
-        vm.prank(owner);
         tracker = new DonationTracker(address(fundPool));
-
-        // Authorize tracker
-        vm.prank(owner);
-        fundPool.setTrackerAuthorization(address(tracker), true);
-
-        // Give donor some ETH
-        vm.deal(donor, 10 ether);
-
-        // Create a donation to work with
-        vm.prank(donor);
-        fundPool.donate{value: 1 ether}(ngo);
-
-        // Add a milestone
-        vm.prank(owner);
-        fundPool.addMilestone(1, "First milestone", 0.5 ether);
     }
-
+    
+    function testDeployment() public {
+        assertEq(tracker.owner(), owner);
+        assertEq(address(tracker.fundPool()), address(fundPool));
+    }
+    
     function testSubmitReport() public {
-        // Submit a milestone report
-        vm.prank(owner);
-        tracker.submitReport(
-            1, // fundId
-            0, // milestoneIndex
-            "Work completed on first milestone", // description
-            "QmHashOfProofDocuments" // IPFS CID
-        );
-
-        // Verify report details
-        (uint256 fundId, uint256 milestoneIndex, string memory description, string memory proofCID, bool approved) =
-            tracker.reports(1, 0);
-
-        assertEq(fundId, 1);
-        assertEq(milestoneIndex, 0);
-        assertEq(description, "Work completed on first milestone");
-        assertEq(proofCID, "QmHashOfProofDocuments");
-        assertEq(approved, false);
+        vm.prank(ngo);
+        vm.expectEmit(true, true, false, true);
+        emit ReportSubmitted(fundId, milestoneIndex, description, proofCID);
+        tracker.submitReport(fundId, milestoneIndex, description, proofCID);
+        
+        (string memory storedDesc, string memory storedCID, bool approved) = tracker.getReportDetails(fundId, milestoneIndex);
+        assertEq(storedDesc, description);
+        assertEq(storedCID, proofCID);
+        assertFalse(approved);
+    }
+    
+    function test_RevertWhen_SubmittingReportWithEmptyCID() public {
+        vm.prank(ngo);
+        vm.expectRevert("Proof CID required");
+        tracker.submitReport(fundId, milestoneIndex, description, "");
     }
 
     function testApproveReport() public {
-        // First submit a report
-        vm.prank(owner);
-        tracker.submitReport(
-            1, // fundId
-            0, // milestoneIndex
-            "Work completed on first milestone", // description
-            "QmHashOfProofDocuments" // IPFS CID
-        );
-
-        // Get NGO balance before approval
-        uint256 ngoBefore = ngo.balance;
-
+        // Submit a report first
+        vm.prank(ngo);
+        tracker.submitReport(fundId, milestoneIndex, description, proofCID);
+        
         // Approve the report
-        vm.prank(owner);
-        tracker.approveReport(1, 0);
-
-        // Check report is marked as approved
-        (,,,, bool approved) = tracker.reports(1, 0);
+        vm.expectEmit(true, true, false, false);
+        emit ReportApproved(fundId, milestoneIndex);
+        tracker.approveReport(fundId, milestoneIndex);
+        
+        // Check report is approved
+        (,, bool approved) = tracker.getReportDetails(fundId, milestoneIndex);
         assertTrue(approved);
-
-        // Check funds were released
-        uint256 ngoAfter = ngo.balance;
-        assertEq(ngoAfter - ngoBefore, 0.5 ether);
-
-        // Verify milestone is marked as released in FundPool
-        (,, bool released) = fundPool.getMilestone(1, 0);
-        assertTrue(released);
+        
+        // Check FundPool was called
+        assertEq(fundPool.lastFundId(), fundId);
+        assertEq(fundPool.lastMilestoneIndex(), milestoneIndex);
+        assertTrue(fundPool.releaseWasCalled());
+    }
+    
+    function test_RevertWhen_NonOwnerApprovesReport() public {
+        // Submit a report first
+        vm.prank(ngo);
+        tracker.submitReport(fundId, milestoneIndex, description, proofCID);
+        
+        // Non-owner tries to approve
+        vm.prank(nonOwner);
+        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", nonOwner));
+        tracker.approveReport(fundId, milestoneIndex);
     }
 
     function test_RevertWhen_ApprovingNonExistentReport() public {
-        // Try to approve a report that doesn't exist
-        vm.prank(owner);
         vm.expectRevert("Report does not exist");
-        tracker.approveReport(1, 1);
+        tracker.approveReport(999, 999);
     }
 
-    function test_RevertWhen_SubmittingReportWithEmptyProof() public {
-        // Submit a report with empty proof CID
-        vm.prank(owner);
-        vm.expectRevert("Proof CID required");
-        tracker.submitReport(
-            1, // fundId
-            0, // milestoneIndex
-            "Work completed on first milestone", // description
-            "" // Empty IPFS CID - should fail
-        );
+    function test_RevertWhen_ApprovingAlreadyApprovedReport() public {
+        // Submit and approve a report
+        vm.prank(ngo);
+        tracker.submitReport(fundId, milestoneIndex, description, proofCID);
+        tracker.approveReport(fundId, milestoneIndex);
+        
+        // Try to approve again
+        vm.expectRevert("Report already approved");
+        tracker.approveReport(fundId, milestoneIndex);
     }
 
-    function test_RevertWhen_NonOwnerApproval() public {
-        // First submit a report
-        vm.prank(owner);
-        tracker.submitReport(
-            1, // fundId
-            0, // milestoneIndex
-            "Work completed on first milestone", // description
-            "QmHashOfProofDocuments" // IPFS CID
-        );
+    function testRejectReport() public {
+        // Submit a report first
+        vm.prank(ngo);
+        tracker.submitReport(fundId, milestoneIndex, description, proofCID);
+        
+        string memory reason = "Insufficient documentation";
+        
+        // Reject the report
+        vm.expectEmit(true, true, false, true);
+        emit ReportRejected(fundId, milestoneIndex, reason);
+        tracker.rejectReport(fundId, milestoneIndex, reason);
+    }
+    
+    function test_RevertWhen_NonOwnerRejectsReport() public {
+        // Submit a report first
+        vm.prank(ngo);
+        tracker.submitReport(fundId, milestoneIndex, description, proofCID);
+        
+        // Non-owner tries to reject
+        vm.prank(nonOwner);
+        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", nonOwner));
+        tracker.rejectReport(fundId, milestoneIndex, "Some reason");
+    }
 
-        // Try to approve as non-owner
-        vm.prank(donor);
-        // Updated to match the actual error from OpenZeppelin Ownable contract
-        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", donor));
-        tracker.approveReport(1, 0);
+    function test_RevertWhen_RejectingNonExistentReport() public {
+        vm.expectRevert("Report does not exist");
+        tracker.rejectReport(999, 999, "Some reason");
+    }
+
+    function test_RevertWhen_RejectingApprovedReport() public {
+        // Submit and approve a report
+        vm.prank(ngo);
+        tracker.submitReport(fundId, milestoneIndex, description, proofCID);
+        tracker.approveReport(fundId, milestoneIndex);
+        
+        // Try to reject
+        vm.expectRevert("Report already approved");
+        tracker.rejectReport(fundId, milestoneIndex, "Some reason");
+    }
+
+    function testApproveReportLegacy() public {
+        // Submit a report first
+        vm.prank(ngo);
+        tracker.submitReport(fundId, 0, description, proofCID);
+        
+        // Approve the report using legacy function
+        vm.expectEmit(true, true, false, false);
+        emit ReportApproved(fundId, 0);
+        tracker.approveReportLegacy(fundId);
+        
+        // Check report is approved
+        (,, bool approved) = tracker.getReportDetails(fundId, 0);
+        assertTrue(approved);
+        
+        // Check FundPool legacy function was called
+        assertEq(fundPool.lastFundId(), fundId);
+        assertTrue(fundPool.legacyReleaseWasCalled());
     }
 }

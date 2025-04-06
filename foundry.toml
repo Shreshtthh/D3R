@@ -2,16 +2,46 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-remappings = [
-    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
-    "@chainlink/contracts/=lib/chainlink/contracts/",
-    "forge-std/=lib/forge-std/src/"
-]
+solc_version = "0.8.20"
+evm_version = "paris"
+auto_detect_solc = true
+optimizer = true
+optimizer_runs = 200
+ffi = false
+fs_permissions = [{ access = "read", path = "./"}]
+
+# Explicitly disable forking to prevent fork-url errors
+eth_rpc_url = ""
+# Explicitly disable forking
+fork_block_number = 0
+no_storage_caching = true
+no_fork = true
+
+# Special profile for deployment that forces no-forking
+[profile.deploy]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.20"
+evm_version = "paris"
+optimizer = true
+optimizer_runs = 200
+no_fork = true
+# Force no forking for deployment
+eth_rpc_url = ""
+# Do not use any fork settings
+fork_block_number = 0
+fork_url = ""
+
+[profile.ci]
+verbosity = 4
 
 [rpc_endpoints]
-sepolia = "${SEPOLIA_RPC_URL}"
+# Add your network endpoints here for convenience
+sepolia = "${RPC_URL}"
 
 [etherscan]
-sepolia = { key = "${ETHERSCAN_API_KEY}" }
+# Your etherscan API key - will be populated from environment variable
+sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api-sepolia.etherscan.io/api" }
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
