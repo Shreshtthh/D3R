@@ -20,10 +20,10 @@ contract D3RProtocol is Ownable {
     MilestoneFunding public milestoneFunding;
     IPFSVerifier public ipfsVerifier;
     ChainlinkDisasterOracle public disasterOracle;
-    
+
     // Events
     event ComponentUpdated(string name, address indexed component);
-    
+
     constructor(
         address _ngoRegistry,
         address _fundPool,
@@ -39,25 +39,25 @@ contract D3RProtocol is Ownable {
         ipfsVerifier = IPFSVerifier(_ipfsVerifier);
         disasterOracle = ChainlinkDisasterOracle(_disasterOracle);
     }
-    
+
     /**
      * @dev Create a new disaster relief project with milestones
      */
     function createReliefProject(
         string memory _disasterId,
-        address _ngoAddress, 
-        string memory _name, 
+        address _ngoAddress,
+        string memory _name,
         string memory _description,
         uint256 _value
     ) external payable onlyOwner {
         // Verify the disaster is confirmed
-        (bool verified, uint8 confidence, , ) = disasterOracle.getDisasterVerification(_disasterId);
+        (bool verified, uint8 confidence,,) = disasterOracle.getDisasterVerification(_disasterId);
         require(verified && confidence >= 70, "Disaster not verified with sufficient confidence");
-        
+
         // Create the milestone project
         milestoneFunding.createProject{value: _value}(_ngoAddress, _name, _description);
     }
-    
+
     /**
      * @dev Update component contract addresses
      */
@@ -77,7 +77,7 @@ contract D3RProtocol is Ownable {
         } else {
             revert("Invalid component name");
         }
-        
+
         emit ComponentUpdated(_name, _component);
     }
 }

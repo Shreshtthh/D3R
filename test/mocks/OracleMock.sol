@@ -5,18 +5,18 @@ import "forge-std/Test.sol";
 
 contract OracleMock {
     address public link;
-    
+
     struct Request {
         address callbackAddr;
         bytes4 callbackFunc;
     }
-    
+
     mapping(bytes32 => Request) public requests;
-    
+
     constructor(address _link) {
         link = _link;
     }
-    
+
     // Functions needed for ChainlinkDisasterOracle tests
     function fulfillOracleRequest(
         address _callbackAddr,
@@ -32,11 +32,11 @@ contract OracleMock {
             _confidence,
             _source
         );
-        
+
         (bool success,) = _callbackAddr.call(callData);
         return success;
     }
-    
+
     // Functions needed for MilestoneFunding tests
     function oracleRequest(
         address sender,
@@ -50,7 +50,7 @@ contract OracleMock {
     ) external {
         requests[id] = Request(callbackAddress, callbackFunctionId);
     }
-    
+
     // Helper to simulate oracle response
     function simulateFulfill(bytes32 requestId, bool result) external {
         Request memory req = requests[requestId];

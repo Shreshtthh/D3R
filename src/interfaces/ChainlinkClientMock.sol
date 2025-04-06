@@ -42,11 +42,11 @@ contract ChainlinkClientMock {
     }
 
     // Mock for building a request
-    function buildChainlinkRequest(
-        bytes32 _jobId,
-        address _callbackAddr,
-        bytes4 _callbackFuncId
-    ) internal pure returns (Chainlink.Request memory) {
+    function buildChainlinkRequest(bytes32 _jobId, address _callbackAddr, bytes4 _callbackFuncId)
+        internal
+        pure
+        returns (Chainlink.Request memory)
+    {
         Chainlink.Request memory req;
         req.id = _jobId;
         req.callbackAddress = _callbackAddr;
@@ -55,11 +55,10 @@ contract ChainlinkClientMock {
     }
 
     // Mock for sending a request
-    function sendChainlinkRequestTo(
-        address _oracle,
-        Chainlink.Request memory _req,
-        uint256 _payment
-    ) internal returns (bytes32 requestId) {
+    function sendChainlinkRequestTo(address _oracle, Chainlink.Request memory _req, uint256 _payment)
+        internal
+        returns (bytes32 requestId)
+    {
         requestId = keccak256(abi.encodePacked(_req.id, requestCount));
         requestCount++;
         pendingRequests[requestId] = _req.callbackAddress;

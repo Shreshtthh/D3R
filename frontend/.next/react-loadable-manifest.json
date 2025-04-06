@@ -10,5 +10,9 @@
     "files": [
       "static/chunks/_pages-dir-browser_node_modules_next_dist_pages__error_js.js"
     ]
+  },
+  "pages\\connection-check.js -> ../contracts/MilestoneFunding.json": {
+    "id": "pages\\connection-check.js -> ../contracts/MilestoneFunding.json",
+    "files": []
   }
 }

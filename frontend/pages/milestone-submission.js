@@ -1,39 +1,49 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { submitReliefUpdate, getReliefCampaigns, getCurrentAccount } from '../utils/web3';
-import styles from '../styles/Home.module.css';
+import { useRouter } from 'next/router';
+import { 
+  getReliefCampaigns, 
+  getMilestones, 
+  initWeb3,
+  verifyIPFSDocument 
+} from '../utils/web3';
+import { uploadToIPFS, createDisasterDocumentation } from '../utils/ipfsUpload';
+import styles from '../styles/MilestoneSubmission.module.css';
 
 export default function ReliefUpdateSubmission() {
+  const [account, setAccount] = useState(null);
   const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [account, setAccount] = useState('');
-  const [formData, setFormData] = useState({
-    campaignId: '',
-    description: '',
-    proofIpfsHash: '',
-    location: '',
-    peopleHelped: 0,
-    suppliesDelivered: '',
-  });
+  const [selectedCampaign, setSelectedCampaign] = useState(null);
+  const [milestones, setMilestones] = useState([]);
+  const [selectedMilestone, setSelectedMilestone] = useState(null);
+  const [description, setDescription] = useState('');
+  const [proofFiles, setProofFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [updateStatus, setUpdateStatus] = useState(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(true);
   
+  const router = useRouter();
+
   useEffect(() => {
     async function loadData() {
       try {
-        // Get user's account
-        const userAccount = await getCurrentAccount();
+        // Get user's account - Fix the getCurrentAccount problem
+        const { accounts } = await initWeb3(true); // Use initWeb3 directly
+        const userAccount = accounts && accounts.length > 0 ? accounts[0] : null;
         setAccount(userAccount);
         
         // Load campaigns created by this user
-        const allCampaigns = await getReliefCampaigns();
-        const userCampaigns = allCampaigns.filter(campaign => 
-          campaign.creator && campaign.creator.toLowerCase() === userAccount.toLowerCase()
-        );
-        
-        setCampaigns(userCampaigns);
-      } catch (error) {
-        console.error("Error loading campaigns:", error);
+        if (userAccount) {
+          const allCampaigns = await getReliefCampaigns();
+          const userCampaigns = allCampaigns.filter(c => 
+            c.creator && c.creator.toLowerCase() === userAccount.toLowerCase()
+          );
+          setCampaigns(userCampaigns);
+        }
+      } catch (err) {
+        console.error("Error loading data:", err);
+        setError("Failed to load your campaigns. Please make sure your wallet is connected.");
       } finally {
         setLoading(false);
       }
@@ -41,216 +51,250 @@ export default function ReliefUpdateSubmission() {
     
     loadData();
   }, []);
-  
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'peopleHelped' ? parseInt(value) || 0 : value
-    }));
-  }
-  
-  async function handleSubmit(e) {
+
+  // Load milestones when a campaign is selected
+  useEffect(() => {
+    if (!selectedCampaign) {
+      setMilestones([]);
+      return;
+    }
+    
+    async function loadMilestones() {
+      try {
+        const milestonesData = await getMilestones(selectedCampaign.id);
+        // Filter out completed milestones
+        const pendingMilestones = milestonesData.filter(m => !m.isCompleted);
+        setMilestones(pendingMilestones);
+        setSelectedMilestone(null);
+      } catch (err) {
+        console.error("Error loading milestones:", err);
+        setError("Failed to load milestones for this campaign.");
+      }
+    }
+    
+    loadMilestones();
+  }, [selectedCampaign]);
+
+  const handleCampaignChange = (e) => {
+    const campaignId = e.target.value;
+    const campaign = campaigns.find(c => c.id.toString() === campaignId);
+    setSelectedCampaign(campaign);
+    setSelectedMilestone(null);
+    setError('');
+  };
+
+  const handleMilestoneChange = (e) => {
+    const milestoneId = e.target.value;
+    const milestone = milestones.find(m => m.id.toString() === milestoneId);
+    setSelectedMilestone(milestone);
+    setError('');
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      setProofFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!account) {
+      setError("Please connect your wallet to submit a milestone update.");
+      return;
+    }
+    
+    if (!selectedCampaign || !selectedMilestone) {
+      setError("Please select a campaign and milestone.");
+      return;
+    }
+    
+    if (!description.trim()) {
+      setError("Please provide a description of the progress made.");
+      return;
+    }
+    
     setIsSubmitting(true);
-    setUpdateStatus(null);
+    setSuccess('');
+    setError('');
     
     try {
-      await submitReliefUpdate(
-        formData.campaignId,
-        formData.description,
-        formData.proofIpfsHash,
-        formData.location,
-        formData.peopleHelped,
-        formData.suppliesDelivered
-      );
+      // Create documentation package with IPFS uploads
+      const documentationData = {
+        disasterId: selectedCampaign.parsedMetadata?.disasterId || `campaign-${selectedCampaign.id}`,
+        projectId: selectedCampaign.id,
+        milestoneId: selectedMilestone.id,
+        description: description,
+        ngoAddress: account,
+        location: selectedCampaign.parsedMetadata?.location || 'Unknown',
+        notes: `Milestone update: ${selectedMilestone.description}`
+      };
       
-      setUpdateStatus({
-        success: true,
-        message: "Aid update submitted successfully! Your relief progress is now recorded on the blockchain."
-      });
+      // Upload files and create documentation package
+      const uploadResult = await createDisasterDocumentation(documentationData, proofFiles);
       
-      // Reset form
-      setFormData({
-        campaignId: '',
-        description: '',
-        proofIpfsHash: '',
-        location: '',
-        peopleHelped: 0,
-        suppliesDelivered: '',
-      });
-    } catch (error) {
-      console.error("Relief update submission failed:", error);
-      setUpdateStatus({
-        success: false,
-        message: `Update failed: ${error.message || "Please check your connection and try again"}`
-      });
+      if (uploadResult && uploadResult.cid) {
+        // Verify the document on-chain
+        await verifyIPFSDocument(uploadResult.cid);
+        
+        // Update UI with success message
+        setSuccess(`Successfully submitted milestone update! IPFS CID: ${uploadResult.cid}`);
+        
+        // Clear form
+        setDescription('');
+        setProofFiles([]);
+        
+        // Reload milestones to reflect changes
+        const milestonesData = await getMilestones(selectedCampaign.id);
+        const pendingMilestones = milestonesData.filter(m => !m.isCompleted);
+        setMilestones(pendingMilestones);
+        
+        // If no more pending milestones, clear selection
+        if (pendingMilestones.length === 0) {
+          setSelectedMilestone(null);
+        }
+      } else {
+        throw new Error("Failed to upload documentation to IPFS");
+      }
+    } catch (err) {
+      console.error("Error submitting milestone update:", err);
+      setError(`Failed to submit milestone update: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
-  }
-  
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <p>Loading your campaigns...</p>
-        </main>
-      </div>
-    );
-  }
-  
+  };
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Submit Relief Progress | Block-Donate</title>
-        <meta name="description" content="Report aid deliveries and progress with verified proof" />
+        <title>Submit Relief Progress | D3R Platform</title>
+        <meta name="description" content="Submit updates on relief milestones" />
       </Head>
-      
-      <main className={styles.main}>
-        <h1 className={styles.title}>Report Relief Progress</h1>
-        
-        <p className={styles.description}>
-          Document your aid deliveries and relief progress with blockchain verification
+
+      <div className={styles.mainContent}>
+        <h1>Submit Relief Progress Report</h1>
+        <p className={styles.subtitle}>
+          Document and verify the completion of relief milestones for your campaigns
         </p>
         
-        {campaigns.length === 0 ? (
+        {loading ? (
+          <div className={styles.loadingContainer}>
+            <div className={styles.loadingSpinner}></div>
+            <p>Loading your campaigns...</p>
+          </div>
+        ) : !account ? (
+          <div className={styles.connectWalletMessage}>
+            <p>Please connect your wallet to submit milestone updates.</p>
+          </div>
+        ) : campaigns.length === 0 ? (
           <div className={styles.noCampaigns}>
-            <h2>No Active Relief Campaigns Found</h2>
-            <p>
-              You don't have any active relief campaigns. 
-              Only campaign creators can submit relief updates.
-            </p>
-            <a href="/donor-dashboard" className={styles.button}>
-              View All Campaigns
-            </a>
+            <h3>No Campaigns Found</h3>
+            <p>You don't have any active relief campaigns associated with this wallet address.</p>
+            <p>To create a new relief campaign, please go to the NGO Portal.</p>
           </div>
         ) : (
-          <>
-            {updateStatus && (
-              <div className={`${styles.statusMessage} ${updateStatus.success ? styles.success : styles.error}`}>
-                {updateStatus.message}
-              </div>
-            )}
+          <form onSubmit={handleSubmit} className={styles.submissionForm}>
+            <div className={styles.formGroup}>
+              <label htmlFor="campaign">Select Relief Campaign</label>
+              <select 
+                id="campaign"
+                value={selectedCampaign?.id || ''}
+                onChange={handleCampaignChange}
+                required
+              >
+                <option value="">-- Select Campaign --</option>
+                {campaigns.map(campaign => (
+                  <option key={campaign.id} value={campaign.id}>
+                    {campaign.title}
+                  </option>
+                ))}
+              </select>
+            </div>
             
-            <form className={styles.form} onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <label htmlFor="campaignId">Select Relief Campaign:</label>
-                <select
-                  id="campaignId"
-                  name="campaignId"
-                  value={formData.campaignId}
-                  onChange={handleChange}
-                  required
-                  className={styles.formInput}
-                >
-                  <option value="">-- Select a campaign --</option>
-                  {campaigns.map(campaign => (
-                    <option key={campaign.id} value={campaign.id}>
-                      {campaign.title} - {campaign.parsedMetadata?.disasterType || 'General Relief'}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className={styles.formGroup}>
-                <label htmlFor="description">Update Description:</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                  className={styles.formTextarea}
-                  placeholder="Describe the relief provided and impact made"
-                />
-              </div>
-              
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="location">Specific Location:</label>
-                  <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    required
-                    className={styles.formInput}
-                    placeholder="Specific area where aid was delivered"
-                  />
+            <div className={styles.formGroup}>
+              <label htmlFor="milestone">Select Milestone to Update</label>
+              <select 
+                id="milestone"
+                value={selectedMilestone?.id || ''}
+                onChange={handleMilestoneChange}
+                disabled={!selectedCampaign || milestones.length === 0}
+                required
+              >
+                <option value="">-- Select Milestone --</option>
+                {milestones.map(milestone => (
+                  <option key={milestone.id} value={milestone.id}>
+                    {milestone.description} ({milestone.fundPercentage}% of funds)
+                  </option>
+                ))}
+              </select>
+              {selectedCampaign && milestones.length === 0 && (
+                <p className={styles.noMilestones}>
+                  No pending milestones found for this campaign. All milestones may be completed already.
+                </p>
+              )}
+            </div>
+            
+            {selectedMilestone && (
+              <>
+                <div className={styles.milestoneInfo}>
+                  <h3>Milestone Details</h3>
+                  <p><strong>Description:</strong> {selectedMilestone.description}</p>
+                  <p><strong>Verification Type:</strong> {selectedMilestone.verificationType}</p>
+                  <p><strong>Fund Percentage:</strong> {selectedMilestone.fundPercentage}% of total funds</p>
                 </div>
                 
                 <div className={styles.formGroup}>
-                  <label htmlFor="peopleHelped">People Helped:</label>
-                  <input
-                    type="number"
-                    id="peopleHelped"
-                    name="peopleHelped"
-                    min="0"
-                    value={formData.peopleHelped}
-                    onChange={handleChange}
+                  <label htmlFor="description">Progress Description</label>
+                  <textarea 
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={6}
+                    placeholder="Describe the progress made and how the milestone requirements have been fulfilled..."
                     required
-                    className={styles.formInput}
-                  />
+                  ></textarea>
                 </div>
-              </div>
-              
-              <div className={styles.formGroup}>
-                <label htmlFor="suppliesDelivered">Supplies Delivered:</label>
-                <textarea
-                  id="suppliesDelivered"
-                  name="suppliesDelivered"
-                  value={formData.suppliesDelivered}
-                  onChange={handleChange}
-                  required
-                  className={styles.formTextarea}
-                  placeholder="List types and quantities of supplies delivered (e.g., '200 food kits, 500 water bottles')"
-                />
-              </div>
-              
-              <div className={styles.formGroup}>
-                <label htmlFor="proofIpfsHash">Proof (IPFS Hash):</label>
-                <input
-                  type="text"
-                  id="proofIpfsHash"
-                  name="proofIpfsHash"
-                  value={formData.proofIpfsHash}
-                  onChange={handleChange}
-                  required
-                  className={styles.formInput}
-                  placeholder="IPFS hash of photos/documents proving relief delivery"
-                />
-                <small>
-                  Upload your verification documents/images to IPFS and paste the hash here.
-                  <a href="https://nft.storage/" target="_blank" rel="noopener noreferrer" className={styles.inlineLink}>
-                    {" "}(Need help uploading to IPFS?)
-                  </a>
-                </small>
-              </div>
-              
-              <div className={styles.formActions}>
-                <button 
-                  type="submit" 
-                  className={styles.button}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Submitting...' : 'Submit Relief Update'}
-                </button>
-              </div>
-            </form>
-          </>
+                
+                <div className={styles.formGroup}>
+                  <label htmlFor="files">Upload Evidence Files</label>
+                  <p className={styles.fileInfo}>
+                    Upload photos, documents, videos, or other evidence files. These will be stored on IPFS.
+                  </p>
+                  <input 
+                    type="file"
+                    id="files"
+                    onChange={handleFileChange}
+                    multiple
+                  />
+                  {proofFiles.length > 0 && (
+                    <div className={styles.selectedFiles}>
+                      <p>Selected {proofFiles.length} file(s):</p>
+                      <ul>
+                        {proofFiles.map((file, index) => (
+                          <li key={index}>{file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+            
+            {error && <div className={styles.errorMessage}>{error}</div>}
+            {success && <div className={styles.successMessage}>{success}</div>}
+            
+            <div className={styles.submitActions}>
+              <button 
+                type="submit" 
+                className={styles.submitButton}
+                disabled={isSubmitting || !selectedMilestone}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Relief Update'}
+              </button>
+            </div>
+          </form>
         )}
-        
-        <div className={styles.verificationNote}>
-          <h3>Transparency & Verification</h3>
-          <p>
-            All relief updates are permanently recorded on the blockchain and linked to 
-            verification proof. This creates an immutable, transparent record of your 
-            organization's impact that donors can trust.
-          </p>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ contract DeployScript is Script {
         address oracleAddress;
         bytes32 jobId;
         uint256 fee;
-        
+
         try vm.envAddress("LINK_TOKEN_ADDRESS") returns (address addr) {
             linkTokenAddress = addr;
             console.log("LINK token address:", linkTokenAddress);
@@ -26,7 +26,7 @@ contract DeployScript is Script {
             linkTokenAddress = address(0x779877A7B0D9E8603169DdbD7836e478b4624789); // Default Sepolia LINK
             console.log("Warning: Using default LINK token address:", linkTokenAddress);
         }
-        
+
         try vm.envAddress("ORACLE_ADDRESS") returns (address addr) {
             oracleAddress = addr;
             console.log("Oracle address:", oracleAddress);
@@ -41,7 +41,7 @@ contract DeployScript is Script {
                 console.log("Warning: Oracle address not set, will use deployer address");
             }
         }
-        
+
         try vm.envBytes32("JOB_ID") returns (bytes32 id) {
             jobId = id;
             console.log("Job ID loaded");
@@ -60,7 +60,7 @@ contract DeployScript is Script {
                 }
             }
         }
-        
+
         try vm.envUint("ORACLE_FEE") returns (uint256 value) {
             fee = value;
             console.log("Oracle fee:", fee);
@@ -78,11 +78,11 @@ contract DeployScript is Script {
         // Start deployment - this will use the private key provided via --private-key flag
         // No need to explicitly load the private key in the script
         vm.startBroadcast();
-        
+
         // If oracle address was not set, use the deployer address
         address deployerAddress = msg.sender;
         console.log("Deployer address:", deployerAddress);
-        
+
         if (oracleAddress == address(0)) {
             oracleAddress = deployerAddress;
             console.log("Setting oracle address to deployer:", oracleAddress);
@@ -112,12 +112,7 @@ contract DeployScript is Script {
 
         // Deploy MilestoneFunding contract
         console.log("Deploying MilestoneFunding...");
-        MilestoneFunding milestoneFunding = new MilestoneFunding(
-            oracleAddress,
-            jobId,
-            fee,
-            address(ngoRegistry)
-        );
+        MilestoneFunding milestoneFunding = new MilestoneFunding(oracleAddress, jobId, fee, address(ngoRegistry));
         console.log("MilestoneFunding deployed at:", address(milestoneFunding));
 
         // Set the IPFS verifier in MilestoneFunding
@@ -153,12 +148,12 @@ contract DeployScript is Script {
         console.log("ipfsVerifier:", address(ipfsVerifier));
         console.log("disasterOracle:", address(disasterOracle));
         console.log("d3rProtocol:", address(protocol));
-        
+
         console.log("\nDeployment completed successfully!");
 
         vm.stopBroadcast();
     }
-    
+
     // Convert a string to bytes32
     function stringToBytes32(string memory source) internal pure returns (bytes32 result) {
         bytes memory tempEmptyStringTest = bytes(source);

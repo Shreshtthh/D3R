@@ -659,6 +659,20 @@ export const checkPreviousConnection = async () => {
   }
 };
 
+// Add the missing getCurrentAccount function
+export const getCurrentAccount = async () => {
+  try {
+    const { web3, accounts } = await initWeb3(false);
+    if (accounts && accounts.length > 0) {
+      return accounts[0];
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting current account:", error);
+    return null;
+  }
+};
+
 export default {
   initWeb3,
   getReliefCampaigns,
@@ -674,5 +688,6 @@ export default {
   DISASTER_TYPES,
   URGENCY_LEVELS,
   checkWeb3Connection,
-  connectWallet
+  connectWallet,
+  getCurrentAccount   // Add this to the exports
 };

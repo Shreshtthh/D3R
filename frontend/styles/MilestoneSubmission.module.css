@@ -1,0 +1,246 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.mainContent {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.connectWalletMessage {
+  text-align: center;
+  padding: 3rem;
+  background-color: #eff6ff;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.connectWalletMessage p {
+  font-size: 1.1rem;
+  color: #1d4ed8;
+}
+
+.noCampaigns {
+  text-align: center;
+  padding: 3rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.noCampaigns h3 {
+  color: #334155;
+  margin-bottom: 1rem;
+}
+
+.noCampaigns p {
+  color: #64748b;
+  max-width: 500px;
+  margin: 0 auto 1rem;
+}
+
+.submissionForm {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #334155;
+}
+
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  background-color: white;
+}
+
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.formGroup select:disabled {
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.fileInfo {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 0.8rem;
+}
+
+.formGroup input[type="file"] {
+  display: block;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.formGroup input[type="file"]:hover {
+  background-color: #f1f5f9;
+}
+
+.selectedFiles {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.selectedFiles ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.selectedFiles li {
+  color: #475569;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.milestoneInfo {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-left: 4px solid #2563eb;
+  border-radius: 0 8px 8px 0;
+}
+
+.milestoneInfo h3 {
+  color: #334155;
+  margin-bottom: 1rem;
+}
+
+.milestoneInfo p {
+  color: #475569;
+  margin-bottom: 0.7rem;
+}
+
+.errorMessage {
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background-color: #fee2e2;
+  border-left: 4px solid #dc2626;
+  border-radius: 0 8px 8px 0;
+  color: #b91c1c;
+}
+
+.successMessage {
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background-color: #dcfce7;
+  border-left: 4px solid #10b981;
+  border-radius: 0 8px 8px 0;
+  color: #047857;
+}
+
+.noMilestones {
+  font-style: italic;
+  color: #64748b;
+  margin-top: 0.5rem;
+}
+
+.submitActions {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.submitButton {
+  padding: 0.9rem 2.5rem;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.submitButton:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .mainContent {
+    padding: 1.5rem;
+  }
+  
+  .milestoneInfo {
+    padding: 1rem;
+  }
+  
+  .submitButton {
+    width: 100%;
+  }
+}

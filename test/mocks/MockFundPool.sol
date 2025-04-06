@@ -8,13 +8,13 @@ contract MockFundPool {
     uint256 public lastMilestoneIndex;
     bool public releaseWasCalled;
     bool public legacyReleaseWasCalled;
-    
+
     function releaseMilestoneFunds(uint256 _fundId, uint256 _milestoneIndex) external {
         lastFundId = _fundId;
         lastMilestoneIndex = _milestoneIndex;
         releaseWasCalled = true;
     }
-    
+
     function releaseFunds(uint256 _fundId) external {
         lastFundId = _fundId;
         legacyReleaseWasCalled = true;
